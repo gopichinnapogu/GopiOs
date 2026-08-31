@@ -25,6 +25,7 @@ import {
   Maximize2,
   Minimize2
 } from 'lucide-react';
+import { executeCodeInLab } from '../../utils/compilerRunner';
 
 export type SupportedLanguage = 'java' | 'c' | 'cpp' | 'python' | 'javascript';
 
@@ -611,6 +612,7 @@ export const CodeLabSection: React.FC = () => {
   const [execTime, setExecTime] = useState<number | null>(null);
   const [memoryUsage, setMemoryUsage] = useState<number | null>(null);
   const [exitCode, setExitCode] = useState<number | null>(null);
+  const [activeEngine, setActiveEngine] = useState<string | null>(null);
   const [history, setHistory] = useState<ExecutionHistoryItem[]>([]);
   
   // UI states
@@ -672,7 +674,7 @@ export const CodeLabSection: React.FC = () => {
     setExitCode(null);
   };
 
-  // Real-time compilation and execution via backend endpoint
+  // Real-time compilation and execution with multi-tier failover (Node backend -> Judge0 CE -> Browser JS)
   const handleRunCode = async () => {
     if (isRunning) return;
 
@@ -683,24 +685,7 @@ export const CodeLabSection: React.FC = () => {
     setActiveTab('output');
 
     try {
-      const response = await fetch('/api/compiler/execute', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          language: selectedLang,
-          code: currentCode,
-          stdin: stdinInput
-        })
-      });
-
-      if (!response.ok) {
-        const errJson = await response.json().catch(() => ({}));
-        throw new Error(errJson.stderr || errJson.error || `HTTP ${response.status} Error`);
-      }
-
-      const result = await response.json();
+      const result = await executeCodeInLab(selectedLang, currentCode, stdinInput);
 
       setStdout(result.stdout || (result.status === 'SUCCESS' ? '(Process finished with exit code 0, no stdout output)' : ''));
       setStderr(result.stderr || '');
@@ -708,6 +693,7 @@ export const CodeLabSection: React.FC = () => {
       setExecTime(result.executionTimeMs);
       setMemoryUsage(result.memoryUsageMb);
       setExitCode(result.exitCode);
+      setActiveEngine(result.engine);
 
       // Add to execution history
       const historyEntry: ExecutionHistoryItem = {
@@ -1137,12 +1123,17 @@ export const CodeLabSection: React.FC = () => {
             </div>
 
             {execTime !== null && (
-              <div className="flex items-center space-x-3 text-[11px]">
+              <div className="flex items-center space-x-2 text-[11px]">
+                {activeEngine && (
+                  <span className="text-[10px] text-slate-400 bg-slate-900 border border-slate-800 px-1.5 py-0.5 rounded hidden sm:inline">
+                    {activeEngine}
+                  </span>
+                )}
                 <span className="text-cyan-400 font-bold">
                   {execTime} ms
                 </span>
                 {memoryUsage !== null && (
-                  <span className="text-slate-500 hidden sm:inline">
+                  <span className="text-slate-500 hidden md:inline">
                     {memoryUsage} MB
                   </span>
                 )}
