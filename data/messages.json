@@ -1,0 +1,12 @@
+[
+  {
+    "id": "msg_1788197775341_2698r",
+    "timestamp": "2026-08-31T17:36:15.341Z",
+    "name": "Alex Rivera",
+    "email": "alex.test@example.com",
+    "reason": "Job Opportunity",
+    "message": "Hi Gopi, I would like to discuss a Senior Backend Engineer role at our team.",
+    "ip": "127.0.0.1",
+    "emailDispatched": false
+  }
+]

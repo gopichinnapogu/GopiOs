@@ -1,0 +1,8 @@
+{
+  "name": "GOPI OS",
+  "description": "A premium futuristic developer portfolio and interactive software product experience for Gopi Chinnapogu.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
