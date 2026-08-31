@@ -1,0 +1,2032 @@
+# GOPI OS — MASTER AUTONOMOUS BUILD PROMPT
+
+You are the **Principal Architect, Staff Full-Stack Engineer, UI/UX Engineer, Security Engineer, QA Engineer, and Technical Project Lead** responsible for building this entire software product.
+
+You have been provided with the complete GOPI OS project specifications.
+
+Your job is to turn those specifications into a **production-quality, fully working developer portfolio application**.
+
+Do not treat this as a simple portfolio website.
+
+Treat it as a real software product.
+
+---
+
+# 1. SOURCE OF TRUTH
+
+Before writing code, read and understand ALL provided GOPI OS specification documents.
+
+They include:
+
+1. Master Product / SRS
+2. UI/UX Screen Specification
+3. System Architecture
+4. Data Model & Content Schema
+5. API Contracts & Integration Specification
+6. AI Architecture, Grounding & Safety
+7. Security Architecture & Threat Model
+8. Engineering Standards & Coding Rules
+9. This Master Build Prompt
+
+These documents collectively define the product.
+
+Do not ignore requirements because they are inconvenient.
+
+Do not invent a different architecture without a technical reason.
+
+If two requirements conflict, choose the safer and more maintainable approach and document the decision.
+
+---
+
+# 2. PRODUCT VISION
+
+Build:
+
+# GOPI OS
+
+A premium futuristic developer portfolio that behaves like an interactive software product.
+
+The experience should communicate:
+
+* software engineering ability
+* problem-solving ability
+* AI engineering
+* product thinking
+* technical depth
+* UI/UX skill
+* attention to detail
+
+The visitor should feel:
+
+> "This person didn't just make a portfolio. This person knows how to build software."
+
+---
+
+# 3. IMPORTANT UX GOAL
+
+The site must impress people without becoming a gimmick.
+
+The design should be:
+
+* premium
+* futuristic
+* minimal
+* technical
+* sophisticated
+* responsive
+* fast
+* accessible
+
+Avoid:
+
+* excessive neon
+* excessive hacker aesthetics
+* excessive glassmorphism
+* unnecessary 3D
+* endless animations
+* giant text everywhere
+* confusing navigation
+* slow cinematic loading screens
+
+The product must look impressive because of **quality**, not because of visual noise.
+
+---
+
+# 4. TECH STACK
+
+Use the following stack unless a documented technical limitation requires an alternative:
+
+```text
+Framework:
+Next.js
+
+Language:
+TypeScript
+
+UI:
+React
+
+Styling:
+Tailwind CSS
+
+UI Components:
+shadcn/ui where useful
+
+Icons:
+Lucide
+
+Animation:
+Motion
+
+Validation:
+Zod
+
+Testing:
+Vitest
+React Testing Library
+Playwright
+
+Linting:
+ESLint
+
+Formatting:
+Prettier
+
+Package Manager:
+pnpm
+
+Version Control:
+Git + GitHub
+
+Deployment:
+Vercel
+
+Database:
+None for MVP
+
+Authentication:
+None for MVP
+
+CMS:
+None for MVP
+```
+
+Do not add additional libraries casually.
+
+Every new dependency must have a clear reason.
+
+---
+
+# 5. ARCHITECTURE
+
+Use a modular architecture.
+
+Conceptually:
+
+```text
+UI
+ ↓
+Application Logic
+ ↓
+Domain / Data
+ ↓
+Infrastructure
+```
+
+Keep:
+
+```text
+UI
+AI
+GitHub
+Contact
+Security
+Data
+Utilities
+```
+
+separated.
+
+Do not create a giant component or giant utility file.
+
+---
+
+# 6. REPOSITORY STRUCTURE
+
+Use a clean structure similar to:
+
+```text
+src/
+├── app/
+│   ├── page.tsx
+│   ├── about/
+│   ├── skills/
+│   ├── projects/
+│   │   └── [slug]/
+│   ├── thinking/
+│   ├── timeline/
+│   ├── contact/
+│   └── api/
+│
+├── components/
+│   ├── ui/
+│   ├── layout/
+│   ├── hero/
+│   ├── projects/
+│   ├── skills/
+│   ├── thinking/
+│   ├── timeline/
+│   ├── recruiter/
+│   ├── github/
+│   └── ai/
+│
+├── data/
+├── domain/
+├── services/
+├── lib/
+├── hooks/
+├── types/
+└── styles/
+```
+
+Adapt this to actual Next.js conventions when appropriate.
+
+---
+
+# 7. CENTRALIZED DUMMY DATA
+
+My real portfolio information is not ready yet.
+
+Therefore:
+
+**Use realistic dummy data everywhere personal information is required.**
+
+Examples:
+
+```text
+Name:
+Gopi
+
+Role:
+B.Tech Student / Developer
+
+University:
+Example University
+
+GitHub:
+example-github
+
+Email:
+example@example.com
+```
+
+Projects:
+
+```text
+Project Alpha
+Project Beta
+Project Gamma
+```
+
+Use realistic technical descriptions.
+
+IMPORTANT:
+
+All dummy information must exist in centralized data files.
+
+For example:
+
+```text
+src/data/profile.ts
+src/data/projects.ts
+src/data/skills.ts
+src/data/timeline.ts
+src/data/achievements.ts
+src/data/thinking.ts
+```
+
+Do NOT hardcode personal content inside components.
+
+I will replace the dummy information later.
+
+---
+
+# 8. MVP
+
+Build the following first:
+
+```text
+Home
+About
+Skills
+Projects
+Project Details
+How I Think
+Developer Timeline
+Contact
+Resume
+Recruiter Mode
+GitHub Integration
+Interactive Project Demo
+```
+
+The MVP must feel like a finished product.
+
+---
+
+# 9. HERO / GOPI OS BOOT
+
+Create a short boot experience:
+
+```text
+GOPI OS
+
+SYSTEM STATUS: ONLINE
+
+> Initializing developer...
+> Loading Java................ OK
+> Loading DSA................. OK
+> Loading AI.................. OK
+> Loading projects............ OK
+
+BUILD. SOLVE. CREATE.
+
+[ ENTER PORTFOLIO ]
+```
+
+Requirements:
+
+* premium
+* subtle
+* fast
+* responsive
+* skippable
+* accessible
+* does not block content unnecessarily
+
+Target duration:
+
+```text
+~1–1.5 seconds
+```
+
+Do not create a 10-second intro.
+
+---
+
+# 10. HOME PAGE
+
+The homepage should immediately communicate:
+
+```text
+Who I am
+What I build
+What I am good at
+What I am currently learning
+Proof of ability
+Where to explore next
+```
+
+Include strong navigation toward:
+
+```text
+Projects
+Skills
+How I Think
+GitHub
+Resume
+Contact
+AI Assistant
+Recruiter Mode
+```
+
+---
+
+# 11. ABOUT
+
+Create a concise but visually strong About section.
+
+Do not write generic filler such as:
+
+> "I am passionate about technology and always eager to learn."
+
+Use structured information:
+
+```text
+Identity
+Current focus
+Technical interests
+Engineering philosophy
+Current learning
+```
+
+All content should come from centralized data.
+
+---
+
+# 12. SKILLS EXPERIENCE
+
+Do not rely on generic progress bars.
+
+Create an interactive skill explorer.
+
+Example:
+
+```text
+JAVA
+ ├── OOP
+ ├── Collections
+ ├── Exception Handling
+ └── DSA
+
+PYTHON
+ ├── Data Science
+ └── Machine Learning
+
+SQL
+ └── Database Fundamentals
+```
+
+Clicking a skill should reveal:
+
+```text
+Description
+Related technologies
+Concepts
+Projects
+Evidence
+```
+
+If proficiency percentages are used, they must be clearly configurable dummy values.
+
+Never fabricate real achievements.
+
+---
+
+# 13. PROJECT EXPERIENCE
+
+Projects must feel like engineering case studies.
+
+Each project should support:
+
+```text
+Problem
+Goal
+Solution
+Features
+Architecture
+Technologies
+Challenges
+Trade-offs
+Results
+Lessons
+```
+
+Create visually impressive project cards.
+
+Each card should support:
+
+```text
+View Details
+Live Demo
+Source
+```
+
+where applicable.
+
+---
+
+# 14. PROJECT DETAILS
+
+Create dynamic project routes:
+
+```text
+/projects/[slug]
+```
+
+Each project should have a polished case-study page.
+
+Include:
+
+```text
+Overview
+Problem
+Solution
+Architecture
+Tech Stack
+Features
+Engineering Challenges
+Technical Decisions
+Results
+Lessons
+```
+
+Use dummy information for now.
+
+---
+
+# 15. INTERACTIVE PROJECT DEMO
+
+At least one project should have an interactive demo.
+
+Use a realistic example such as:
+
+```text
+AI Desktop Assistant
+```
+
+The demo can include:
+
+```text
+CPU
+RAM
+Battery
+Assistant interface
+System controls
+Automation controls
+```
+
+However:
+
+**THIS IS A SIMULATION.**
+
+Do not give the browser arbitrary operating-system access.
+
+Do not execute shell commands.
+
+Do not execute visitor-provided code.
+
+Do not expose server resources.
+
+Make the demo feel real while keeping it completely safe.
+
+---
+
+# 16. HOW I THINK
+
+Build a dedicated technical thinking section.
+
+Each problem should show:
+
+```text
+Problem
+Constraints
+Observation
+Approach
+Alternative
+Chosen solution
+Complexity
+Implementation
+Lessons
+```
+
+Example:
+
+```text
+Binary Search
+
+Understand constraints
+        ↓
+Identify sorted structure
+        ↓
+Define invariant
+        ↓
+Implement
+        ↓
+Analyze
+
+Time: O(log n)
+Space: O(1)
+```
+
+This section is important because it demonstrates actual engineering thinking.
+
+---
+
+# 17. DEVELOPER TIMELINE
+
+Create an interactive timeline.
+
+Example dummy timeline:
+
+```text
+2025
+Started programming
+
+2026
+Java
+DSA
+Problem Solving
+Python
+Machine Learning
+
+2027
+Future placeholder
+```
+
+Clicking an event should reveal:
+
+```text
+Skills
+Projects
+Achievements
+Learning
+Milestones
+```
+
+All timeline data must be editable from the data layer.
+
+---
+
+# 18. RECRUITER MODE
+
+Recruiter Mode is a high-priority feature.
+
+Provide a clear switch/action.
+
+Recruiter Mode should transform the experience into a concise hiring-focused interface.
+
+Show:
+
+```text
+Name
+Role
+Core Skills
+Top Projects
+Problem-Solving Evidence
+GitHub
+Resume
+Contact
+```
+
+Remove unnecessary visual distractions.
+
+The recruiter should understand the candidate quickly.
+
+---
+
+# 19. GITHUB
+
+Create GitHub integration.
+
+Potential information:
+
+```text
+repositories
+recent activity
+languages
+stars
+selected projects
+```
+
+Use server-side fetching where credentials are required.
+
+Cache GitHub data.
+
+The homepage must not break when GitHub is unavailable.
+
+Fallback:
+
+```text
+cached data
+OR
+graceful unavailable state
+```
+
+---
+
+# 20. CONTACT
+
+Build a polished contact form.
+
+Fields:
+
+```text
+Reason
+Name
+Email
+Message
+```
+
+Reasons:
+
+```text
+Job Opportunity
+Collaboration
+Project Discussion
+General Message
+```
+
+Validate on both client and server.
+
+Protect against:
+
+```text
+spam
+oversized payloads
+malicious input
+repeated requests
+```
+
+---
+
+# 21. RESUME
+
+Provide a clear resume action.
+
+Use a dummy resume initially.
+
+The resume path must come from centralized configuration.
+
+---
+
+# 22. AI ASSISTANT
+
+Implement the AI assistant according to the AI Architecture specification.
+
+It must answer using:
+
+```text
+verified portfolio data
+```
+
+Examples:
+
+```text
+What projects has Gopi built?
+
+What is his strongest skill?
+
+What is he currently learning?
+
+Show me his best project.
+
+How does he approach DSA?
+
+Why should I interview him?
+```
+
+---
+
+# 23. AI GROUNDING
+
+Architecture:
+
+```text
+Visitor Question
+       ↓
+Validation
+       ↓
+Intent / Retrieval
+       ↓
+Approved Portfolio Knowledge
+       ↓
+Context Builder
+       ↓
+AI Provider
+       ↓
+Output Validation
+       ↓
+Sources
+       ↓
+Safe Actions
+```
+
+Never give the AI arbitrary database authority.
+
+---
+
+# 24. AI UNKNOWN ANSWERS
+
+If the portfolio does not contain enough evidence:
+
+```text
+I don't have verified information about that
+in Gopi's portfolio.
+```
+
+Do not invent.
+
+Never fabricate:
+
+```text
+companies
+employment
+internships
+awards
+ratings
+salary
+projects
+certifications
+achievements
+```
+
+---
+
+# 25. AI ACTIONS
+
+Use an allowlist:
+
+```text
+VIEW_PROJECT
+VIEW_SKILLS
+VIEW_TIMELINE
+VIEW_THINKING
+VIEW_RESUME
+VIEW_CONTACT
+VIEW_GITHUB
+```
+
+The AI returns:
+
+```text
+action type
+entity ID
+```
+
+The application resolves the actual route.
+
+Never allow the model to generate arbitrary URLs for application navigation.
+
+---
+
+# 26. AI SECURITY
+
+Protect against:
+
+```text
+prompt injection
+indirect prompt injection
+secret extraction
+data leakage
+oversized prompts
+request flooding
+malicious URLs
+unsafe tool requests
+```
+
+Visitor input is untrusted.
+
+Portfolio content retrieved for the AI is data, not instructions.
+
+---
+
+# 27. SECURITY
+
+Implement the complete security specification.
+
+At minimum:
+
+```text
+HTTPS
+Security Headers
+CSP
+Input Validation
+Output Sanitization
+URL Validation
+Rate Limiting
+Payload Limits
+Safe Error Handling
+Secret Protection
+Dependency Security
+AI Security
+```
+
+Never expose secrets to client-side JavaScript.
+
+---
+
+# 28. ENVIRONMENT VARIABLES
+
+Create:
+
+```text
+.env.example
+```
+
+Example:
+
+```text
+SITE_URL=
+
+GITHUB_USERNAME=
+GITHUB_TOKEN=
+
+AI_API_KEY=
+
+EMAIL_API_KEY=
+CONTACT_EMAIL=
+
+ANALYTICS_ID=
+```
+
+Use placeholders.
+
+Never commit real credentials.
+
+---
+
+# 29. SECURITY HEADERS
+
+Configure appropriate production headers.
+
+Evaluate:
+
+```text
+Content-Security-Policy
+X-Content-Type-Options
+Referrer-Policy
+Permissions-Policy
+Strict-Transport-Security
+```
+
+CSP must be compatible with the actual application.
+
+Do not blindly use:
+
+```text
+*
+```
+
+as a security policy.
+
+---
+
+# 30. XSS
+
+Never render untrusted HTML.
+
+AI output is untrusted.
+
+If Markdown is used:
+
+```text
+Markdown
+ ↓
+Sanitize
+ ↓
+Render
+```
+
+Reject unsafe URLs such as:
+
+```text
+javascript:
+data:
+vbscript:
+```
+
+where they could create executable content.
+
+---
+
+# 31. RATE LIMITING
+
+At minimum protect:
+
+```text
+/api/ai
+/api/contact
+```
+
+Use configurable rate limits.
+
+Return:
+
+```text
+429
+```
+
+when appropriate.
+
+---
+
+# 32. PERFORMANCE
+
+The site must be fast.
+
+Prioritize:
+
+```text
+core content
+navigation
+projects
+skills
+then expensive features
+```
+
+Lazy-load heavy functionality.
+
+Especially:
+
+```text
+3D
+large demos
+visualizers
+AI
+future experiments
+```
+
+Do not ship unnecessary client JavaScript.
+
+---
+
+# 33. ACCESSIBILITY
+
+Target WCAG 2.2 AA principles.
+
+Ensure:
+
+```text
+semantic HTML
+keyboard navigation
+focus management
+screen reader labels
+accessible forms
+good contrast
+reduced motion
+touch-friendly controls
+```
+
+All important information must remain accessible without experimental interactions.
+
+---
+
+# 34. ANIMATION
+
+Use animation intentionally.
+
+Good:
+
+```text
+page transitions
+hover feedback
+state transitions
+hero boot sequence
+subtle data visualization
+```
+
+Bad:
+
+```text
+constant movement
+scroll hijacking
+excessive particle effects
+long loading animations
+```
+
+Respect:
+
+```text
+prefers-reduced-motion
+```
+
+---
+
+# 35. RESPONSIVE DESIGN
+
+Test:
+
+```text
+mobile
+tablet
+desktop
+large desktop
+```
+
+The mobile experience must be intentionally designed.
+
+Do not simply shrink the desktop UI.
+
+---
+
+# 36. DESIGN SYSTEM
+
+Create reusable design tokens for:
+
+```text
+colors
+spacing
+typography
+radius
+shadows
+motion
+breakpoints
+```
+
+Create reusable components where appropriate:
+
+```text
+Button
+Card
+Badge
+Dialog
+Input
+Textarea
+Tabs
+Skeleton
+Toast
+```
+
+Do not create abstractions unnecessarily.
+
+---
+
+# 37. STATE MANAGEMENT
+
+Do not install a global state library unless genuinely necessary.
+
+Prefer:
+
+```text
+local state
+URL state
+server state
+```
+
+Use global state only when justified.
+
+---
+
+# 38. SERVER/CLIENT BOUNDARIES
+
+Use server rendering wherever practical.
+
+Client components only where necessary for:
+
+```text
+interaction
+state
+browser APIs
+AI chat
+interactive demos
+```
+
+Never expose server-only credentials.
+
+---
+
+# 39. TYPESCRIPT
+
+Use strict TypeScript.
+
+Avoid:
+
+```text
+any
+```
+
+unless there is a documented exceptional case.
+
+External data must be runtime validated.
+
+---
+
+# 40. CODE QUALITY
+
+Follow these rules:
+
+```text
+small components
+clear names
+single responsibility
+centralized data
+typed interfaces
+validated external data
+safe error handling
+minimal dependencies
+no duplicated logic
+no magic values
+```
+
+---
+
+# 41. TESTING
+
+Implement:
+
+```text
+Unit Tests
+Component Tests
+Integration Tests
+E2E Tests
+Accessibility Tests
+Security Tests
+AI Evaluation Tests
+```
+
+---
+
+# 42. REQUIRED E2E TESTS
+
+Test:
+
+```text
+Home → Projects
+Home → Project Details
+Home → Resume
+Home → Contact
+Recruiter Mode
+AI Assistant
+Mobile Navigation
+```
+
+---
+
+# 43. AI TESTS
+
+Create tests for:
+
+```text
+normal questions
+unknown questions
+ambiguous questions
+prompt injection
+indirect injection
+secret extraction
+fake achievement requests
+malicious navigation requests
+```
+
+The AI must never fabricate personal information.
+
+---
+
+# 44. CI
+
+The project should run:
+
+```text
+install
+ ↓
+lint
+ ↓
+typecheck
+ ↓
+unit tests
+ ↓
+build
+ ↓
+E2E tests
+```
+
+Security/dependency checks should be included where practical.
+
+---
+
+# 45. GIT
+
+Use meaningful commits.
+
+Examples:
+
+```text
+feat: add recruiter mode
+feat: add project case study
+feat: add grounded portfolio assistant
+fix: handle github api timeout
+fix: sanitize external links
+refactor: isolate portfolio data layer
+```
+
+Do not use meaningless commit messages such as:
+
+```text
+update
+final
+changes
+done
+```
+
+---
+
+# 46. DO NOT BUILD THESE YET
+
+Do NOT implement these during the core MVP:
+
+```text
+3D Workspace
+Voice Navigation
+Built-in Terminal
+Complex CMS
+Authentication
+Database
+Vector Database
+Microservices
+Kubernetes
+```
+
+These are future possibilities.
+
+Do not add complexity simply because it sounds impressive.
+
+---
+
+# 47. FUTURE ROADMAP
+
+After the core product is stable:
+
+## V1
+
+```text
+AI Assistant
+Interactive Skill Map
+Developer Timeline enhancements
+Command Palette
+Conversational Contact
+Developer Dashboard
+```
+
+## V2
+
+```text
+Terminal simulation
+Easter egg
+Achievement system
+Theme variants
+Engineering Lab
+Problem Explorer
+```
+
+## Experimental
+
+```text
+3D Workspace
+Challenge Me
+Voice
+```
+
+Only build these after measuring whether they improve the product.
+
+---
+
+# 48. COMMAND PALETTE
+
+When eventually implemented:
+
+```text
+Ctrl + K
+```
+
+or:
+
+```text
+Cmd + K
+```
+
+should open:
+
+```text
+Search portfolio...
+
+About
+Projects
+Skills
+Thinking
+Timeline
+GitHub
+Resume
+Contact
+```
+
+This is V1, not core MVP unless already specified otherwise.
+
+---
+
+# 49. TERMINAL
+
+When eventually implemented:
+
+It must be simulated.
+
+Allowed:
+
+```text
+help
+about
+skills
+projects
+timeline
+github
+resume
+contact
+```
+
+Never execute arbitrary shell commands.
+
+---
+
+# 50. 3D
+
+Do not load a 3D environment on the initial site.
+
+If implemented later:
+
+```text
+lazy load
+mobile fallback
+reduced motion support
+performance budget
+```
+
+The normal portfolio must always remain available.
+
+---
+
+# 51. CONTENT CREDIBILITY
+
+Do not fabricate evidence.
+
+Dummy information is acceptable during development.
+
+Clearly structure it so it can be replaced.
+
+The finished site should eventually contain only real:
+
+```text
+projects
+skills
+achievements
+statistics
+experience
+education
+```
+
+---
+
+# 52. SEO
+
+Implement:
+
+```text
+metadata
+page titles
+descriptions
+Open Graph
+canonical URLs
+sitemap
+robots
+```
+
+Each important page needs meaningful metadata.
+
+---
+
+# 53. ERROR HANDLING
+
+Every external/dynamic operation needs:
+
+```text
+loading
+success
+empty
+error
+```
+
+states.
+
+The user must never see raw:
+
+```text
+stack traces
+provider errors
+filesystem paths
+internal exception details
+```
+
+---
+
+# 54. EXTERNAL SERVICE FAILURE
+
+If:
+
+```text
+GitHub fails
+AI fails
+Email fails
+Analytics fails
+```
+
+the core website must continue functioning.
+
+Example:
+
+```text
+AI unavailable
+→ normal navigation remains available
+
+GitHub unavailable
+→ cached data/fallback
+
+Email unavailable
+→ direct email fallback
+```
+
+---
+
+# 55. CONTENT MANAGEMENT
+
+MVP content workflow:
+
+```text
+Edit TypeScript data
+ ↓
+Validate
+ ↓
+Build
+ ↓
+Deploy
+```
+
+Do not build an admin CMS yet.
+
+---
+
+# 56. DUMMY DATA REPLACEMENT
+
+Make replacing dummy information easy.
+
+A developer should be able to update:
+
+```text
+src/data/
+```
+
+without modifying UI components.
+
+This is a mandatory architectural requirement.
+
+---
+
+# 57. README
+
+Create a professional README containing:
+
+```text
+Project Overview
+Features
+Architecture
+Tech Stack
+Folder Structure
+Local Setup
+Environment Variables
+Development
+Testing
+Build
+Deployment
+Content Customization
+GitHub Configuration
+AI Configuration
+Security
+Troubleshooting
+```
+
+---
+
+# 58. DEVELOPMENT COMMANDS
+
+Provide working scripts such as:
+
+```text
+pnpm dev
+pnpm build
+pnpm start
+pnpm lint
+pnpm test
+pnpm test:e2e
+pnpm typecheck
+```
+
+Adapt names to the actual package configuration.
+
+---
+
+# 59. ARCHITECTURAL DECISIONS
+
+Maintain an ADR directory:
+
+```text
+docs/adr/
+```
+
+Document major decisions.
+
+Examples:
+
+```text
+ADR-001 Next.js
+ADR-002 Static portfolio data for MVP
+ADR-003 AI provider abstraction
+ADR-004 Cached GitHub integration
+ADR-005 No database for MVP
+ADR-006 Experimental features deferred
+```
+
+---
+
+# 60. DEVELOPMENT PHASES
+
+Build in this exact order.
+
+## PHASE 0 — FOUNDATION
+
+Set up:
+
+```text
+Next.js
+TypeScript
+Tailwind
+ESLint
+Prettier
+Testing
+folder structure
+data layer
+design tokens
+```
+
+Then verify:
+
+```text
+install
+lint
+typecheck
+build
+```
+
+---
+
+## PHASE 1 — DESIGN SYSTEM
+
+Build:
+
+```text
+global layout
+navigation
+footer
+buttons
+cards
+typography
+responsive system
+theme foundations
+```
+
+Create the visual language.
+
+---
+
+## PHASE 2 — CORE PORTFOLIO
+
+Build:
+
+```text
+Hero
+About
+Skills
+Projects
+Project Details
+Thinking
+Timeline
+Resume
+Contact
+```
+
+Use dummy data.
+
+---
+
+## PHASE 3 — RECRUITER EXPERIENCE
+
+Build:
+
+```text
+Recruiter Mode
+```
+
+Optimize it for a visitor evaluating the candidate quickly.
+
+---
+
+## PHASE 4 — GITHUB
+
+Implement:
+
+```text
+GitHub API
+server-side integration
+caching
+loading
+error
+fallback
+```
+
+---
+
+## PHASE 5 — INTERACTIVE DEMO
+
+Build one polished interactive project demonstration.
+
+It must be safe.
+
+---
+
+## PHASE 6 — QUALITY
+
+Before AI:
+
+```text
+tests
+accessibility
+security
+performance
+responsive QA
+SEO
+error handling
+```
+
+Fix issues.
+
+Do not proceed with known major problems.
+
+---
+
+## PHASE 7 — AI
+
+Implement:
+
+```text
+knowledge pipeline
+retrieval
+context builder
+AI provider abstraction
+grounded generation
+response validation
+sources
+actions
+rate limiting
+security
+fallback
+```
+
+---
+
+## PHASE 8 — FINAL POLISH
+
+Perform a full product review.
+
+Check:
+
+```text
+visual consistency
+responsive behavior
+animation
+accessibility
+performance
+security
+content quality
+navigation
+AI quality
+recruiter usability
+```
+
+---
+
+# 61. PRODUCT REVIEW
+
+Before final delivery, ask:
+
+### Can a recruiter understand Gopi in 30–60 seconds?
+
+### Can they find the resume?
+
+### Can they find the best projects?
+
+### Can they understand technical strengths?
+
+### Can they see evidence rather than claims?
+
+### Can they contact him?
+
+### Does the site work without AI?
+
+### Does the site work on mobile?
+
+### Does it feel like a real product?
+
+If any answer is no, improve the product before declaring completion.
+
+---
+
+# 62. VISUAL QUALITY BAR
+
+The website should feel closer to:
+
+```text
+high-end developer product
+```
+
+than:
+
+```text
+student portfolio template
+```
+
+Use hierarchy and restraint.
+
+The UI should feel intentionally designed.
+
+---
+
+# 63. IMPRESSION TEST
+
+A visitor should experience approximately:
+
+```text
+0–5 sec
+"Interesting."
+
+5–20 sec
+"This is interactive."
+
+20–45 sec
+"This person actually builds things."
+
+45–90 sec
+"I can see evidence of technical ability."
+
+90+ sec
+"I want to know more / contact him."
+```
+
+---
+
+# 64. DO NOT OPTIMIZE FOR FEATURE COUNT
+
+A smaller number of excellent features is better than many mediocre features.
+
+Priority:
+
+```text
+Quality
+>
+Clarity
+>
+Evidence
+>
+Usability
+>
+Performance
+>
+Feature count
+```
+
+---
+
+# 65. AUTONOMOUS EXECUTION RULE
+
+You may make reasonable implementation decisions without asking me about trivial details.
+
+However, stop and ask for clarification when a decision would materially change:
+
+```text
+architecture
+security
+product scope
+data model
+AI behavior
+deployment
+```
+
+Do not ask unnecessary questions for obvious implementation details.
+
+---
+
+# 66. WHEN SOMETHING IS UNKNOWN
+
+Do not invent personal information.
+
+Use:
+
+```text
+DUMMY
+PLACEHOLDER
+TODO
+```
+
+where appropriate.
+
+Make it easy to replace later.
+
+---
+
+# 67. WHEN SOMETHING FAILS
+
+Do not hide the failure.
+
+Report:
+
+```text
+Problem
+Root Cause
+Attempted Fix
+Current State
+Recommended Next Step
+```
+
+---
+
+# 68. NEVER CHEAT THE TESTS
+
+Never:
+
+```text
+disable tests
+delete failing tests
+suppress errors
+use any everywhere
+remove validation
+```
+
+just to make the build pass.
+
+Fix the underlying problem.
+
+---
+
+# 69. FINAL DEFINITION OF DONE
+
+Do not declare GOPI OS complete until:
+
+```text
+PRODUCT
+□ MVP implemented
+□ Navigation complete
+□ Projects functional
+□ Resume functional
+□ Contact functional
+□ Recruiter Mode functional
+
+DESIGN
+□ Premium
+□ Consistent
+□ Responsive
+□ Accessible
+
+ENGINEERING
+□ TypeScript strict
+□ Modular architecture
+□ Centralized content
+□ Clean repository
+□ No unnecessary dependencies
+
+AI
+□ Grounded
+□ Validated
+□ Secure
+□ Source-aware
+□ Safe fallback
+
+SECURITY
+□ Secrets protected
+□ Inputs validated
+□ Outputs sanitized
+□ Rate limits
+□ Security headers
+□ Injection protection
+
+PERFORMANCE
+□ Fast initial render
+□ Optimized images
+□ Heavy features lazy-loaded
+□ Mobile tested
+
+QUALITY
+□ Tests passing
+□ Lint passing
+□ Typecheck passing
+□ Production build passing
+□ E2E critical flows passing
+```
+
+---
+
+# 70. FINAL INSTRUCTION
+
+Do not merely make the site functional.
+
+Make it **convincing**.
+
+Every major interaction should answer:
+
+> Why does this exist?
+
+Every visual effect should answer:
+
+> What does this communicate?
+
+Every architecture decision should answer:
+
+> Why is this the right engineering choice?
+
+Every AI response should answer:
+
+> What evidence supports this?
+
+Every feature should answer:
+
+> Does this make the portfolio more credible, useful, memorable, or technically impressive?
+
+If the answer is no, do not add the feature.
+
+Build GOPI OS as if it will be reviewed by:
+
+* a senior software engineer
+* a technical recruiter
+* a UI/UX designer
+* an engineering manager
+* another developer inspecting the source code
+
+The final product should survive all five perspectives.
+
+# BUILD THE PRODUCT.
+
+# DO NOT BUILD A DEMO OF A PRODUCT.
