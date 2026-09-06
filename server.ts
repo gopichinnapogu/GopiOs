@@ -579,7 +579,7 @@ function getGenAI(): GoogleGenAI | null {
   return genAIClient;
 }
 
-app.post('/api/ai', async (req: Request, res: Response) => {
+app.post(['/api/ai', '/api/ai-query'], async (req: Request, res: Response) => {
   const ip = req.ip || req.headers['x-forwarded-for']?.toString() || 'client';
   if (!checkRateLimit(ip, 8, 0.4)) {
     return res.status(429).json({
@@ -587,7 +587,8 @@ app.post('/api/ai', async (req: Request, res: Response) => {
     });
   }
 
-  const { query, history } = req.body;
+  const query = req.body.query || req.body.text;
+  const history = req.body.history || req.body.conversationHistory;
   if (!query || typeof query !== 'string' || query.trim().length === 0) {
     return res.status(400).json({ error: 'Valid query string is required' });
   }

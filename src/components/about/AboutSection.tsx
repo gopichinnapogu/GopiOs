@@ -62,7 +62,7 @@ export const AboutSection: React.FC = () => {
               Hello! I'm Gopi Chinnapogu
             </h3>
             <p className="text-base text-[#686873] leading-relaxed">
-              I'm a Computer Science student and aspiring software developer currently pursuing my B.Tech degree at KL University. I love exploring new technologies, solving real-world problems, and building products that make a difference.
+              I'm a Computer Science student and aspiring software developer currently pursuing my B.Tech degree at RVR & JC College of Engineering. I love exploring new technologies, solving real-world problems, and building products that make a difference.
             </p>
             <p className="text-base text-[#686873] leading-relaxed">
               My journey in tech began with intense curiosity—wanting to know how systems coordinate logic, data, and memory under the hood. Over time, that curiosity evolved into a passion for engineering full-stack web applications, scalable backends, and responsive user interfaces that are both high-performing and delightful to use.
@@ -115,6 +115,7 @@ export const AboutSection: React.FC = () => {
               <img
                 src="/gopi_portrait.jpg"
                 alt="Gopi Chinnapogu"
+                referrerPolicy="no-referrer"
                 className="w-full h-full object-cover object-center"
               />
 

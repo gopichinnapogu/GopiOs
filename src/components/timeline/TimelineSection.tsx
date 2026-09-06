@@ -150,7 +150,7 @@ export const TimelineSection: React.FC = () => {
               </div>
               <div className="flex items-center justify-between">
                 <span>Institution</span>
-                <span className="font-semibold text-[#151515]">KL University</span>
+                <span className="font-semibold text-[#151515]">RVR & JC College of Engineering</span>
               </div>
               <div className="flex items-center justify-between">
                 <span>Status</span>

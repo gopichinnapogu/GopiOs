@@ -37,7 +37,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </span>
             <span className="text-[#E8A0B8]">•</span>
             <span className="text-xs font-medium text-[#686873]">
-              Developer • Problem Solver • Lifelong Learner
+              CS Undergrad @ RVR & JC • Full-Stack Developer
             </span>
           </div>
 
@@ -126,6 +126,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               <img
                 src="/gopi_portrait.jpg"
                 alt={profileData.name}
+                referrerPolicy="no-referrer"
                 className="w-full h-full object-cover object-center transform hover:scale-102 transition-transform duration-500"
               />
 

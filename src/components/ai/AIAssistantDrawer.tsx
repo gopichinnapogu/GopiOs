@@ -24,7 +24,7 @@ export const AIAssistantDrawer: React.FC<AIAssistantDrawerProps> = ({
     {
       id: 'welcome',
       sender: 'assistant',
-      content: "Hello! I am Gopi's AI Assistant. I can share details about Gopi's software projects, technical skills in React, Java, and Python, academic background at KL University, and experience. What would you like to know?",
+      content: "Hello! I am Gopi's AI Assistant. I can share details about Gopi's software projects, technical skills in React, Java, and Python, academic background at RVR & JC College of Engineering, and experience. What would you like to know?",
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }
   ]);
@@ -78,7 +78,7 @@ export const AIAssistantDrawer: React.FC<AIAssistantDrawerProps> = ({
       const assistantMsg: ChatMessage = {
         id: (Date.now() + 1).toString(),
         sender: 'assistant',
-        content: data.answer || "Gopi is an aspiring Software Engineer skilled in Full-Stack Web Development, Java, and Python.",
+        content: data.content || data.answer || "Gopi is an aspiring Software Engineer skilled in Full-Stack Web Development, Java, and Python.",
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         action: data.action
       };
@@ -86,7 +86,7 @@ export const AIAssistantDrawer: React.FC<AIAssistantDrawerProps> = ({
       setMessages((prev) => [...prev, assistantMsg]);
     } catch (err: any) {
       // Graceful offline fallback
-      let fallbackContent = "Gopi Chinnapogu is a Computer Science undergraduate at KL University (2022-2026). He specializes in Full-Stack Development with React, Node.js, Java, and Python, having built projects like TaskFlow, WeatherWise, and an interactive algorithmic playground.";
+      let fallbackContent = "Gopi Chinnapogu is a Computer Science undergraduate at RVR & JC College of Engineering (2022-2026). He specializes in Full-Stack Development with React, Node.js, Java, and Python, having built projects like TaskFlow, WeatherWise, and an interactive algorithmic playground.";
       let fallbackAction: AIAction | undefined = undefined;
 
       const lower = text.toLowerCase();
