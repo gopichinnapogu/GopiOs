@@ -49,7 +49,7 @@ export function useVisitorCount() {
           body: JSON.stringify({ visitorId })
         });
 
-        if (res.ok) {
+        if (res.ok && res.headers.get('content-type')?.includes('application/json')) {
           const data = await res.json();
           globalVisitorState = {
             count: data.count,

@@ -1,19 +1,15 @@
 import React from 'react';
 import { 
   X, 
-  Download, 
   Printer, 
-  ExternalLink, 
   Mail, 
-  Phone, 
   MapPin, 
   GitBranch, 
-  Globe,
-  CheckCircle2
+  CheckCircle2,
+  GraduationCap
 } from 'lucide-react';
 import { profileData } from '../../data/profile';
 import { projectsData } from '../../data/projects';
-import { skillsData } from '../../data/skills';
 
 interface ResumeModalProps {
   isOpen: boolean;
@@ -28,20 +24,21 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-y-auto print:p-0 print:bg-white print:static">
-      <div className="relative w-full max-w-4xl bg-[#090e1a] border border-cyan-900/80 rounded-xl shadow-2xl overflow-hidden my-8 max-h-[90vh] flex flex-col print:max-h-none print:border-none print:shadow-none print:bg-white print:text-black">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-md overflow-y-auto print:p-0 print:bg-white print:static">
+      <div className="relative w-full max-w-3xl bg-white border border-[#E6E6E8] rounded-3xl shadow-[0_24px_64px_rgba(0,0,0,0.12)] overflow-hidden my-8 max-h-[90vh] flex flex-col print:max-h-none print:border-none print:shadow-none print:bg-white print:text-black">
         {/* Header Bar */}
-        <div className="px-6 py-4 bg-[#060a13] border-b border-slate-800 flex items-center justify-between sticky top-0 z-10 print:hidden">
-          <div className="flex items-center space-x-3">
-            <span className="text-xs font-mono font-semibold text-cyan-400">
-              DOCUMENT // VERIFIED_RESUME.PDF
+        <div className="px-6 py-4 bg-[#F8F7F8] border-b border-[#E6E6E8] flex items-center justify-between sticky top-0 z-10 print:hidden">
+          <div className="flex items-center space-x-2">
+            <span className="w-2 h-2 rounded-full bg-[#C96F91]" />
+            <span className="text-xs font-semibold text-[#151515]">
+              Resume // Gopi Chinnapogu
             </span>
           </div>
 
           <div className="flex items-center space-x-2">
             <button
               onClick={handlePrint}
-              className="px-3 py-1.5 rounded bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="px-4 py-2 rounded-xl bg-[#C96F91] hover:bg-[#B85B80] text-white font-semibold text-xs flex items-center gap-1.5 transition-all shadow-xs"
             >
               <Printer className="w-3.5 h-3.5" />
               <span>Print / Save PDF</span>
@@ -49,7 +46,7 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
 
             <button
               onClick={onClose}
-              className="p-1.5 rounded-md text-slate-400 hover:text-slate-100 hover:bg-slate-800 transition-colors cursor-pointer"
+              className="p-2 rounded-xl text-[#686873] hover:text-[#151515] hover:bg-[#EEF0F3] transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -57,115 +54,95 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
         </div>
 
         {/* Resume Content Body */}
-        <div className="p-8 sm:p-12 overflow-y-auto space-y-6 text-slate-200 text-xs font-sans print:p-0 print:text-black">
+        <div className="p-8 sm:p-10 overflow-y-auto space-y-6 text-[#151515] text-xs sm:text-sm print:p-0">
           {/* Header */}
-          <div className="border-b border-slate-700 pb-4 space-y-2 print:border-black">
-            <h1 className="text-3xl font-extrabold text-slate-100 font-display tracking-tight print:text-black">
+          <div className="border-b border-[#E6E6E8] pb-6 space-y-2">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#151515] tracking-tight">
               {profileData.name}
             </h1>
-            <p className="text-sm font-semibold text-cyan-400 font-mono print:text-gray-800">
-              {profileData.role} &bull; {profileData.degree}
+            <p className="text-sm font-semibold text-[#C96F91]">
+              Computer Science Undergraduate & Aspiring Software Developer
             </p>
-            <div className="flex flex-wrap gap-4 text-xs text-slate-400 font-mono pt-1 print:text-gray-600">
+            <div className="flex flex-wrap items-center gap-4 text-xs text-[#686873] pt-1">
               <span className="flex items-center gap-1">
-                <Mail className="w-3.5 h-3.5 text-cyan-400 print:text-black" />
-                <span>{profileData.email}</span>
+                <Mail className="w-3.5 h-3.5 text-[#C96F91]" />
+                {profileData.email}
               </span>
               <span className="flex items-center gap-1">
-                <MapPin className="w-3.5 h-3.5 text-cyan-400 print:text-black" />
-                <span>{profileData.location}</span>
+                <MapPin className="w-3.5 h-3.5 text-[#C96F91]" />
+                {profileData.location.split('(')[0].trim()}
               </span>
               <span className="flex items-center gap-1">
-                <GitBranch className="w-3.5 h-3.5 text-cyan-400 print:text-black" />
-                <span>github.com/gopichinnapogu</span>
-              </span>
-              <span className="flex items-center gap-1">
-                <Globe className="w-3.5 h-3.5 text-cyan-400 print:text-black" />
-                <span>linkedin.com/in/gopichinnapogu</span>
+                <GitBranch className="w-3.5 h-3.5 text-[#C96F91]" />
+                github.com/gopichinnapogu
               </span>
             </div>
           </div>
 
           {/* Education */}
           <div className="space-y-2">
-            <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-cyan-400 border-b border-slate-800 pb-1 print:text-black print:border-black">
+            <h2 className="text-xs font-bold uppercase tracking-wider text-[#C96F91]">
               Education
             </h2>
-            <div className="flex justify-between items-start">
+            <div className="p-4 rounded-xl bg-[#F8F7F8] border border-[#E6E6E8] flex justify-between items-start">
               <div>
-                <div className="font-bold text-slate-100 print:text-black text-sm">{profileData.university}</div>
-                <div className="text-slate-300 print:text-gray-700">{profileData.degree}</div>
+                <h3 className="font-bold text-sm text-[#151515]">
+                  {profileData.degree}
+                </h3>
+                <p className="text-xs text-[#686873]">
+                  {profileData.university}
+                </p>
               </div>
-              <div className="text-right font-mono text-slate-400 print:text-gray-600">
-                <div>2022 – 2026</div>
-                <div>Hyderabad, India</div>
+              <div className="text-right">
+                <span className="text-xs font-semibold text-[#C96F91]">
+                  2022 – 2026
+                </span>
+                <p className="text-[11px] text-[#686873]">CGPA: ~8.5</p>
               </div>
             </div>
           </div>
 
-          {/* Technical Skills Matrix */}
+          {/* Technical Stack */}
           <div className="space-y-2">
-            <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-cyan-400 border-b border-slate-800 pb-1 print:text-black print:border-black">
+            <h2 className="text-xs font-bold uppercase tracking-wider text-[#C96F91]">
               Technical Skills
             </h2>
-            <div className="space-y-1.5 text-xs">
+            <div className="p-4 rounded-xl bg-[#F8F7F8] border border-[#E6E6E8] space-y-2 text-xs">
               <div>
-                <strong className="text-slate-100 print:text-black font-semibold">Languages: </strong>
-                <span className="text-slate-300 print:text-gray-700">Java (21, Concurrency, JVM), TypeScript / JavaScript (ESNext), Python 3, C++, SQL (PostgreSQL)</span>
+                <strong className="text-[#151515]">Languages:</strong>{' '}
+                <span className="text-[#686873]">Java, Python, JavaScript, TypeScript, C/C++, SQL, HTML5, CSS3</span>
               </div>
               <div>
-                <strong className="text-slate-100 print:text-black font-semibold">Backend & Systems: </strong>
-                <span className="text-slate-300 print:text-gray-700">Express, Node.js, REST APIs, Microservices, Token Bucket Rate Limiting, Connection Pools, WebSockets</span>
+                <strong className="text-[#151515]">Frameworks & Libraries:</strong>{' '}
+                <span className="text-[#686873]">React, Node.js, Express, Tailwind CSS, Vite</span>
               </div>
               <div>
-                <strong className="text-slate-100 print:text-black font-semibold">Applied AI & Machine Learning: </strong>
-                <span className="text-slate-300 print:text-gray-700">Google Gemini API, Grounded RAG Architectures, Vector Search, Strict Anti-Hallucination Guardrails</span>
-              </div>
-              <div>
-                <strong className="text-slate-100 print:text-black font-semibold">Tools & Infrastructure: </strong>
-                <span className="text-slate-300 print:text-gray-700">Git, Docker, Linux / Bash, Postman, Vite, Tailwind CSS, Turborepo</span>
+                <strong className="text-[#151515]">Databases & Tools:</strong>{' '}
+                <span className="text-[#686873]">MongoDB, PostgreSQL, Git, GitHub, Docker, Linux</span>
               </div>
             </div>
           </div>
 
           {/* Featured Projects */}
-          <div className="space-y-4">
-            <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-cyan-400 border-b border-slate-800 pb-1 print:text-black print:border-black">
-              Featured Software Engineering Projects
+          <div className="space-y-3">
+            <h2 className="text-xs font-bold uppercase tracking-wider text-[#C96F91]">
+              Featured Projects
             </h2>
-
-            {projectsData.slice(0, 3).map((p) => (
-              <div key={p.id} className="space-y-1">
-                <div className="flex justify-between items-baseline">
-                  <div className="font-bold text-slate-100 print:text-black text-sm">
-                    {p.title} <span className="font-normal text-xs text-slate-400 print:text-gray-600">| {p.techStack.slice(0, 4).join(', ')}</span>
+            <div className="space-y-3">
+              {projectsData.slice(0, 3).map((p) => (
+                <div key={p.id} className="p-4 rounded-xl bg-white border border-[#E6E6E8] space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-bold text-sm text-[#151515]">{p.title}</h3>
+                    <span className="text-[11px] px-2 py-0.5 rounded-md bg-[#FCE7F0] text-[#C96F91] font-semibold">
+                      {p.badge}
+                    </span>
                   </div>
-                  <span className="font-mono text-slate-400 text-[11px] print:text-gray-600">
-                    {p.metrics[0].label}: {p.metrics[0].value}
-                  </span>
+                  <p className="text-xs text-[#686873]">{p.tagline}</p>
+                  <div className="text-[11px] text-[#151515] font-mono pt-1">
+                    Tech: {p.techStack.join(', ')}
+                  </div>
                 </div>
-                <p className="text-slate-300 print:text-gray-700 leading-relaxed text-xs">
-                  {p.goal}
-                </p>
-                <ul className="list-disc list-inside space-y-0.5 text-slate-400 print:text-gray-600 text-[11px]">
-                  {p.results.map((r, idx) => (
-                    <li key={idx}>{r}</li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-
-          {/* Problem Solving & DSA */}
-          <div className="space-y-2">
-            <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-cyan-400 border-b border-slate-800 pb-1 print:text-black print:border-black">
-              Competitive Problem Solving & Algorithmic Rigor
-            </h2>
-            <div className="text-xs text-slate-300 print:text-gray-700 space-y-1">
-              <div>
-                <strong>450+ Data Structures & Algorithms Solved: </strong>
-                <span>Consistently practicing invariants across Monotonic Queues, Segment Trees, Dynamic Programming with bitmasks, and Graph Traversals (Dijkstra, BFS/DFS, Tarjan's SCC).</span>
-              </div>
+              ))}
             </div>
           </div>
         </div>

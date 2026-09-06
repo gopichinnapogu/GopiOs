@@ -138,6 +138,86 @@ interface ExecutionResult {
   language: string;
 }
 
+function isBinaryAvailable(bin: string): boolean {
+  try {
+    execSync(`which ${bin}`, { stdio: 'ignore' });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function executeViaJudge0Server(
+  language: string,
+  code: string,
+  stdin: string
+): Promise<ExecutionResult> {
+  const languageIds: Record<string, number> = {
+    c: 50,
+    cpp: 54,
+    java: 62,
+    python: 71,
+    javascript: 63
+  };
+
+  const langId = languageIds[language] || 71;
+  const payload: Record<string, any> = {
+    source_code: Buffer.from(code, 'utf-8').toString('base64'),
+    language_id: langId
+  };
+
+  if (stdin && stdin.trim().length > 0) {
+    payload.stdin = Buffer.from(stdin, 'utf-8').toString('base64');
+  }
+
+  const response = await fetch('https://ce.judge0.com/submissions?base64_encoded=true&wait=true', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+
+  if (!response.ok) {
+    throw new Error(`Cloud execution status ${response.status}`);
+  }
+
+  const data: any = await response.json();
+  const rawStdout = data.stdout ? Buffer.from(data.stdout, 'base64').toString('utf-8') : '';
+  const rawStderr = data.stderr ? Buffer.from(data.stderr, 'base64').toString('utf-8') : '';
+  const compileOutput = data.compile_output ? Buffer.from(data.compile_output, 'base64').toString('utf-8') : '';
+  const message = data.message ? Buffer.from(data.message, 'base64').toString('utf-8') : '';
+
+  const execTime = data.time ? Math.round(parseFloat(data.time) * 1000) : 45;
+  const memoryMb = data.memory ? parseFloat((data.memory / 1024).toFixed(1)) : 2.5;
+
+  let status: ExecutionResult['status'] = 'SUCCESS';
+  let stderr = '';
+
+  const statusId = data.status?.id;
+  if (statusId === 3 || statusId === 4) {
+    status = 'SUCCESS';
+    stderr = rawStderr;
+  } else if (statusId === 6) {
+    status = 'COMPILATION_ERROR';
+    stderr = compileOutput || rawStderr || 'Compilation error.';
+  } else if (statusId === 5) {
+    status = 'TIME_LIMIT_EXCEEDED';
+    stderr = 'Execution timed out (Time Limit Exceeded: 5.0s).';
+  } else {
+    status = 'RUNTIME_ERROR';
+    stderr = rawStderr || message || compileOutput || data.status?.description || 'Runtime error.';
+  }
+
+  return {
+    status,
+    stdout: rawStdout,
+    stderr,
+    exitCode: status === 'SUCCESS' ? 0 : (data.exit_code || 1),
+    executionTimeMs: execTime,
+    memoryUsageMb: memoryMb,
+    language
+  };
+}
+
 app.post('/api/compiler/execute', async (req: Request, res: Response) => {
   const { language, code, stdin = '' } = req.body;
 
@@ -196,6 +276,18 @@ app.post('/api/compiler/execute', async (req: Request, res: Response) => {
       runCmd = ['node', 'script.js'];
     } else {
       return res.status(400).json({ error: `Unsupported language: ${language}` });
+    }
+
+    // If local compiler or runtime binary is NOT installed on the host container,
+    // seamlessly proxy to Judge0 Cloud Compiler instead of failing with spawn ENOENT!
+    const requiredBinary = compileCmd ? compileCmd[0] : runCmd[0];
+    if (requiredBinary && !isBinaryAvailable(requiredBinary)) {
+      try {
+        const cloudResult = await executeViaJudge0Server(language, code, stdin);
+        return res.json(cloudResult);
+      } catch (cloudErr: any) {
+        console.warn('[Server Compiler] Cloud failover failed:', cloudErr);
+      }
     }
 
     const filePath = path.join(sandboxDir, fileName);

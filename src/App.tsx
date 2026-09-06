@@ -1,51 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { HeroBoot } from './components/hero/HeroBoot';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { HeroSection } from './components/hero/HeroSection';
 import { AboutSection } from './components/about/AboutSection';
-import { SkillsSection } from './components/skills/SkillsSection';
 import { ProjectsSection } from './components/projects/ProjectsSection';
-import { InteractiveSystemDemo } from './components/demo/InteractiveSystemDemo';
-import { ThinkingSection } from './components/thinking/ThinkingSection';
+import { SkillsSection } from './components/skills/SkillsSection';
 import { TimelineSection } from './components/timeline/TimelineSection';
-import { GitHubSection } from './components/github/GitHubSection';
-import { ContactSection } from './components/contact/ContactSection';
 import { CodeLabSection } from './components/lab/CodeLabSection';
-import { RecruiterModeView } from './components/recruiter/RecruiterModeView';
+import { ContactSection } from './components/contact/ContactSection';
 import { AIAssistantDrawer } from './components/ai/AIAssistantDrawer';
 import { CommandPalette } from './components/ui/CommandPalette';
 import { ResumeModal } from './components/ui/ResumeModal';
+import { ProjectDetailModal } from './components/projects/ProjectDetailModal';
 import { NavSection, AIAction } from './types';
 import { projectsData } from './data/projects';
-import { ProjectDetailModal } from './components/projects/ProjectDetailModal';
 
 export const App: React.FC = () => {
-  const [bootComplete, setBootComplete] = useState<boolean>(() => {
-    return sessionStorage.getItem('gopios_boot_passed') === 'true';
-  });
-  const [recruiterMode, setRecruiterMode] = useState<boolean>(false);
   const [activeSection, setActiveSection] = useState<NavSection>('home');
   const [aiDrawerOpen, setAiDrawerOpen] = useState<boolean>(false);
   const [commandPaletteOpen, setCommandPaletteOpen] = useState<boolean>(false);
   const [resumeModalOpen, setResumeModalOpen] = useState<boolean>(false);
   const [selectedCaseStudySlug, setSelectedCaseStudySlug] = useState<string | null>(null);
 
-  // Global Keyboard shortcuts
+  // Global Keyboard shortcuts (⌘K or Ctrl+K for search)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // ⌘K or Ctrl+K for Command Palette
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
         setCommandPaletteOpen((prev) => !prev);
-      }
-      // 'r' key for Recruiter Mode (if not focused on inputs)
-      const target = e.target as HTMLElement | null;
-      const tag = target?.tagName?.toLowerCase();
-      const isInput = tag === 'input' || tag === 'textarea' || target?.isContentEditable;
-      if (e.key?.toLowerCase() === 'r' && !e.metaKey && !e.ctrlKey && !isInput) {
-        // Toggle recruiter mode
-        // setRecruiterMode(prev => !prev);
       }
     };
 
@@ -53,16 +35,31 @@ export const App: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  const handleBootComplete = () => {
-    sessionStorage.setItem('gopios_boot_passed', 'true');
-    setBootComplete(true);
-  };
+  // Update active section on scroll
+  useEffect(() => {
+    const sectionIds: NavSection[] = ['home', 'about', 'projects', 'skills', 'timeline', 'lab', 'contact'];
+    
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + 200;
+      for (const sectionId of sectionIds) {
+        const el = document.getElementById(sectionId);
+        if (el) {
+          const top = el.offsetTop;
+          const height = el.offsetHeight;
+          if (scrollPosition >= top && scrollPosition < top + height) {
+            setActiveSection(sectionId);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleNavigate = (section: NavSection) => {
     setActiveSection(section);
-    if (recruiterMode) {
-      setRecruiterMode(false);
-    }
     const el = document.getElementById(section);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
@@ -73,8 +70,6 @@ export const App: React.FC = () => {
     if (action.type === 'VIEW_PROJECT' && action.payload) {
       setSelectedCaseStudySlug(action.payload);
       handleNavigate('projects');
-    } else if (action.type === 'VIEW_RECRUITER') {
-      setRecruiterMode(true);
     } else if (action.type === 'VIEW_RESUME') {
       setResumeModalOpen(true);
     } else if (action.type === 'VIEW_SKILLS') {
@@ -89,73 +84,45 @@ export const App: React.FC = () => {
     : null;
 
   return (
-    <div className="min-h-screen bg-[#070b14] text-slate-100 font-sans selection:bg-cyan-500/30 selection:text-cyan-200">
-      {/* Boot Screen Sequence */}
-      {!bootComplete && <HeroBoot onComplete={handleBootComplete} />}
-
-      {/* Main Top Navigation */}
+    <div className="min-h-screen bg-white text-[#151515] font-sans selection:bg-[#E8A0B8]/30 selection:text-[#C96F91]">
+      {/* Top Navbar */}
       <Navbar
         activeSection={activeSection}
         onNavigate={handleNavigate}
-        recruiterMode={recruiterMode}
-        onToggleRecruiter={() => setRecruiterMode((prev) => !prev)}
         onOpenAI={() => setAiDrawerOpen(true)}
         onOpenCommandPalette={() => setCommandPaletteOpen(true)}
       />
 
-      {/* Main Content Area */}
+      {/* Main Content Layout */}
       <main className="relative">
-        {recruiterMode ? (
-          /* Recruiter 45-Second View */
-          <RecruiterModeView
-            onOpenResume={() => setResumeModalOpen(true)}
-            onExitRecruiterMode={() => setRecruiterMode(false)}
-            onSelectProject={(slug) => setSelectedCaseStudySlug(slug)}
-          />
-        ) : (
-          /* Standard Complete Deep-Engineering OS View */
-          <div className="space-y-4">
-            <HeroSection
-              onNavigate={handleNavigate}
-              onOpenRecruiter={() => setRecruiterMode(true)}
-              onOpenAI={() => setAiDrawerOpen(true)}
-              onOpenResume={() => setResumeModalOpen(true)}
-            />
+        <HeroSection
+          onNavigate={handleNavigate}
+          onOpenAI={() => setAiDrawerOpen(true)}
+          onOpenResume={() => setResumeModalOpen(true)}
+        />
 
-            <AboutSection />
+        <AboutSection />
 
-            <SkillsSection
-              onSelectProject={(slug) => {
-                setSelectedCaseStudySlug(slug);
-                handleNavigate('projects');
-              }}
-            />
+        <ProjectsSection
+          onLaunchDemo={(demoType) => {
+            const el = document.getElementById('lab');
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+          }}
+        />
 
-            <ProjectsSection
-              onLaunchDemo={(demoType) => {
-                const el = document.getElementById('demo');
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-              }}
-            />
+        <SkillsSection />
 
-            <InteractiveSystemDemo />
+        <TimelineSection />
 
-            <CodeLabSection />
+        <CodeLabSection />
 
-            <ThinkingSection />
-
-            <TimelineSection />
-
-            <GitHubSection />
-
-            <ContactSection />
-          </div>
-        )}
+        <ContactSection />
       </main>
 
       {/* Footer */}
       <Footer
-        onOpenRecruiter={() => setRecruiterMode(true)}
+        onNavigate={handleNavigate}
+        onOpenRecruiter={() => {}}
         onOpenResume={() => setResumeModalOpen(true)}
         onOpenAI={() => setAiDrawerOpen(true)}
       />
@@ -172,7 +139,7 @@ export const App: React.FC = () => {
         isOpen={commandPaletteOpen}
         onClose={() => setCommandPaletteOpen(false)}
         onNavigate={handleNavigate}
-        onOpenRecruiter={() => setRecruiterMode(true)}
+        onOpenRecruiter={() => {}}
         onOpenAI={() => setAiDrawerOpen(true)}
         onOpenResume={() => setResumeModalOpen(true)}
         onSelectProject={(slug) => setSelectedCaseStudySlug(slug)}
@@ -184,14 +151,14 @@ export const App: React.FC = () => {
         onClose={() => setResumeModalOpen(false)}
       />
 
-      {/* Direct Case Study Trigger Modal (if chosen from AI/Recruiter) */}
+      {/* Project Detail Modal */}
       {selectedCaseStudyProject && (
         <ProjectDetailModal
           project={selectedCaseStudyProject}
           onClose={() => setSelectedCaseStudySlug(null)}
           onLaunchDemo={() => {
             setSelectedCaseStudySlug(null);
-            const el = document.getElementById('demo');
+            const el = document.getElementById('lab');
             if (el) el.scrollIntoView({ behavior: 'smooth' });
           }}
         />

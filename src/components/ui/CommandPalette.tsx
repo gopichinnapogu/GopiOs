@@ -2,20 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { 
   Search, 
   X, 
-  Terminal, 
   Layers, 
   Code2, 
   FileText, 
   Mail, 
-  Briefcase, 
   Sparkles, 
-  ArrowRight,
-  Cpu,
-  FlaskConical
+  ArrowRight
 } from 'lucide-react';
 import { NavSection } from '../../types';
 import { projectsData } from '../../data/projects';
-import { skillsData } from '../../data/skills';
 
 interface CommandPaletteProps {
   isOpen: boolean;
@@ -31,7 +26,6 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   isOpen,
   onClose,
   onNavigate,
-  onOpenRecruiter,
   onOpenAI,
   onOpenResume,
   onSelectProject
@@ -40,10 +34,6 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault();
-        // toggle handled by parent
-      }
       if (e.key === 'Escape' && isOpen) {
         onClose();
       }
@@ -58,138 +48,123 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
 
   const filteredProjects = projectsData.filter(p => 
     (p.title?.toLowerCase() || '').includes(q) ||
-    (p.techStack || []).some(t => (t?.toLowerCase() || '').includes(q))
+    (p.tagline?.toLowerCase() || '').includes(q)
   );
 
-  const filteredSkills = skillsData.filter(s =>
-    (s.name?.toLowerCase() || '').includes(q) ||
-    (s.category?.toLowerCase() || '').includes(q)
-  );
+  const quickNav = [
+    { label: 'Home', section: 'home' as NavSection },
+    { label: 'About', section: 'about' as NavSection },
+    { label: 'Projects', section: 'projects' as NavSection },
+    { label: 'Skills', section: 'skills' as NavSection },
+    { label: 'Experience & Education', section: 'timeline' as NavSection },
+    { label: 'Interactive CodeLab', section: 'lab' as NavSection },
+    { label: 'Contact', section: 'contact' as NavSection }
+  ].filter(item => !q || item.label.toLowerCase().includes(q));
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-20 bg-black/70 backdrop-blur-xs">
-      <div className="w-full max-w-2xl bg-[#090e1a] border border-cyan-900/80 rounded-xl shadow-2xl overflow-hidden font-sans">
-        {/* Search Input */}
-        <div className="p-4 bg-[#060a13] border-b border-slate-800 flex items-center gap-3">
-          <Search className="w-5 h-5 text-cyan-400" />
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 p-4 bg-black/40 backdrop-blur-sm animate-in fade-in duration-150">
+      <div className="relative w-full max-w-xl bg-white border border-[#E6E6E8] rounded-3xl shadow-[0_24px_64px_rgba(0,0,0,0.12)] overflow-hidden">
+        {/* Search Header */}
+        <div className="px-5 py-4 border-b border-[#E6E6E8] flex items-center space-x-3 bg-[#F8F7F8]">
+          <Search className="w-5 h-5 text-[#686873]" />
           <input
             type="text"
             autoFocus
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search projects, skills, thinking cases, or type a command..."
-            className="flex-1 bg-transparent text-slate-100 placeholder-slate-500 text-sm focus:outline-none font-mono"
+            placeholder="Type a command, project, or section to navigate..."
+            className="w-full bg-transparent text-sm text-[#151515] placeholder-[#686873] focus:outline-hidden"
           />
-          <kbd className="px-2 py-0.5 text-[10px] font-mono bg-slate-800 text-slate-400 rounded border border-slate-700">
-            ESC
-          </kbd>
+          <button
+            onClick={onClose}
+            className="p-1.5 rounded-lg text-[#686873] hover:text-[#151515] hover:bg-[#EEF0F3]"
+          >
+            <X className="w-4 h-4" />
+          </button>
         </div>
 
         {/* Results List */}
-        <div className="p-3 max-h-96 overflow-y-auto space-y-4 text-xs">
+        <div className="p-3 max-h-80 overflow-y-auto space-y-4">
           {/* Quick Actions */}
           <div className="space-y-1">
-            <div className="text-[10px] font-mono uppercase text-slate-500 px-2 font-semibold">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-[#686873] px-3">
               Quick Actions
-            </div>
-            <button
-              onClick={() => {
-                onOpenRecruiter();
-                onClose();
-              }}
-              className="w-full p-2.5 rounded-lg hover:bg-slate-800 text-slate-200 flex items-center justify-between transition-colors"
-            >
-              <div className="flex items-center gap-2.5">
-                <Briefcase className="w-4 h-4 text-amber-400" />
-                <span className="font-semibold">Switch to Recruiter 45-Second View</span>
-              </div>
-              <span className="text-[10px] font-mono text-slate-500">&crarr;</span>
-            </button>
-
-            <button
-              onClick={() => {
-                onOpenAI();
-                onClose();
-              }}
-              className="w-full p-2.5 rounded-lg hover:bg-slate-800 text-slate-200 flex items-center justify-between transition-colors"
-            >
-              <div className="flex items-center gap-2.5">
-                <Sparkles className="w-4 h-4 text-cyan-400" />
-                <span className="font-semibold">Open Grounded AI Assistant</span>
-              </div>
-              <span className="text-[10px] font-mono text-slate-500">&crarr;</span>
-            </button>
-
-            <button
-              onClick={() => {
-                onOpenResume();
-                onClose();
-              }}
-              className="w-full p-2.5 rounded-lg hover:bg-slate-800 text-slate-200 flex items-center justify-between transition-colors"
-            >
-              <div className="flex items-center gap-2.5">
-                <FileText className="w-4 h-4 text-emerald-400" />
-                <span className="font-semibold">View & Download Verified Resume</span>
-              </div>
-              <span className="text-[10px] font-mono text-slate-500">&crarr;</span>
-            </button>
-          </div>
-
-          {/* Navigation Sections */}
-          <div className="space-y-1">
-            <div className="text-[10px] font-mono uppercase text-slate-500 px-2 font-semibold">
-              Sections
-            </div>
-            {[
-              { id: 'home', label: 'Home System Telemetry', icon: <Terminal className="w-3.5 h-3.5 text-cyan-400" /> },
-              { id: 'projects', label: 'Projects & Case Studies', icon: <Layers className="w-3.5 h-3.5 text-cyan-400" /> },
-              { id: 'skills', label: 'Skills & Concepts Matrix', icon: <Code2 className="w-3.5 h-3.5 text-cyan-400" /> },
-              { id: 'demo', label: 'Interactive OS Simulator', icon: <Cpu className="w-3.5 h-3.5 text-cyan-400" /> },
-              { id: 'lab', label: 'CodeLab (Interactive Playground)', icon: <FlaskConical className="w-3.5 h-3.5 text-cyan-400" /> },
-              { id: 'thinking', label: 'How I Think (DSA Invariants)', icon: <Cpu className="w-3.5 h-3.5 text-cyan-400" /> },
-              { id: 'contact', label: 'Contact Gateway', icon: <Mail className="w-3.5 h-3.5 text-cyan-400" /> }
-            ].map(item => (
+            </span>
+            <div className="grid grid-cols-2 gap-1.5 pt-1">
               <button
-                key={item.id}
                 onClick={() => {
-                  onNavigate(item.id as NavSection);
                   onClose();
-                  const el = document.getElementById(item.id);
-                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                  onOpenResume();
                 }}
-                className="w-full p-2 rounded hover:bg-slate-800/80 text-slate-300 flex items-center justify-between transition-colors"
+                className="flex items-center space-x-2 px-3 py-2 rounded-xl hover:bg-[#F8F7F8] text-xs font-medium text-[#151515] text-left transition-colors"
               >
-                <div className="flex items-center gap-2.5">
-                  {item.icon}
-                  <span>{item.label}</span>
-                </div>
-                <span className="text-[10px] font-mono text-slate-500">Go</span>
+                <FileText className="w-4 h-4 text-[#C96F91]" />
+                <span>View Resume</span>
               </button>
-            ))}
+
+              <button
+                onClick={() => {
+                  onClose();
+                  onOpenAI();
+                }}
+                className="flex items-center space-x-2 px-3 py-2 rounded-xl hover:bg-[#F8F7F8] text-xs font-medium text-[#151515] text-left transition-colors"
+              >
+                <Sparkles className="w-4 h-4 text-[#C96F91]" />
+                <span>Ask AI About Gopi</span>
+              </button>
+            </div>
           </div>
+
+          {/* Quick Navigation */}
+          {quickNav.length > 0 && (
+            <div className="space-y-1">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[#686873] px-3">
+                Navigation
+              </span>
+              <div className="space-y-0.5 pt-1">
+                {quickNav.map((item) => (
+                  <button
+                    key={item.section}
+                    onClick={() => {
+                      onClose();
+                      onNavigate(item.section);
+                    }}
+                    className="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-[#F8F7F8] text-xs font-medium text-[#151515] text-left transition-colors"
+                  >
+                    <span>{item.label}</span>
+                    <ArrowRight className="w-3.5 h-3.5 text-[#686873]" />
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Projects */}
           {filteredProjects.length > 0 && (
             <div className="space-y-1">
-              <div className="text-[10px] font-mono uppercase text-slate-500 px-2 font-semibold">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[#686873] px-3">
                 Projects
+              </span>
+              <div className="space-y-0.5 pt-1">
+                {filteredProjects.map((p) => (
+                  <button
+                    key={p.id}
+                    onClick={() => {
+                      onClose();
+                      onSelectProject(p.slug);
+                    }}
+                    className="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-[#F8F7F8] text-xs text-[#151515] text-left transition-colors"
+                  >
+                    <div>
+                      <div className="font-semibold">{p.title}</div>
+                      <div className="text-[11px] text-[#686873] line-clamp-1">{p.tagline}</div>
+                    </div>
+                    <span className="text-[10px] px-2 py-0.5 rounded-md bg-[#FCE7F0] text-[#C96F91] font-semibold shrink-0 ml-2">
+                      {p.badge}
+                    </span>
+                  </button>
+                ))}
               </div>
-              {filteredProjects.map(p => (
-                <button
-                  key={p.id}
-                  onClick={() => {
-                    onSelectProject(p.slug);
-                    onClose();
-                  }}
-                  className="w-full p-2 rounded hover:bg-slate-800/80 text-slate-300 flex items-center justify-between transition-colors"
-                >
-                  <div className="flex items-center gap-2">
-                    <Layers className="w-3.5 h-3.5 text-cyan-400" />
-                    <span>{p.title}</span>
-                  </div>
-                  <span className="text-[10px] font-mono text-slate-400">{p.category}</span>
-                </button>
-              ))}
             </div>
           )}
         </div>

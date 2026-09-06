@@ -1,29 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
-  Terminal, 
-  Briefcase, 
-  Sparkles, 
-  Search, 
-  FileText, 
   Menu, 
   X, 
-  Cpu, 
-  CheckCircle2, 
-  GitBranch,
-  Mail,
-  Layers,
-  Code2,
-  FlaskConical,
-  Users
+  ArrowRight, 
+  Sparkles,
+  Search,
+  Code2
 } from 'lucide-react';
 import { NavSection } from '../../types';
-import { useVisitorCount } from '../../hooks/useVisitorCount';
 
 interface NavbarProps {
   activeSection: NavSection;
   onNavigate: (section: NavSection) => void;
-  recruiterMode: boolean;
-  onToggleRecruiter: () => void;
+  recruiterMode?: boolean;
+  onToggleRecruiter?: () => void;
   onOpenAI: () => void;
   onOpenCommandPalette: () => void;
 }
@@ -31,158 +21,110 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({
   activeSection,
   onNavigate,
-  recruiterMode,
-  onToggleRecruiter,
   onOpenAI,
   onOpenCommandPalette
 }) => {
-  const [currentTime, setCurrentTime] = useState<string>('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { count: visitorCount } = useVisitorCount();
 
-  useEffect(() => {
-    const updateTime = () => {
-      const d = new Date();
-      setCurrentTime(d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }));
-    };
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const navItems: { id: NavSection; label: string; icon: React.ReactNode }[] = [
-    { id: 'home', label: 'Home', icon: <Terminal className="w-3.5 h-3.5" /> },
-    { id: 'about', label: 'About', icon: <Cpu className="w-3.5 h-3.5" /> },
-    { id: 'skills', label: 'Skills', icon: <Code2 className="w-3.5 h-3.5" /> },
-    { id: 'projects', label: 'Projects', icon: <Layers className="w-3.5 h-3.5" /> },
-    { id: 'demo', label: 'Simulator', icon: <Terminal className="w-3.5 h-3.5" /> },
-    { id: 'lab', label: 'CodeLab', icon: <FlaskConical className="w-3.5 h-3.5" /> },
-    { id: 'thinking', label: 'How I Think', icon: <Cpu className="w-3.5 h-3.5" /> },
-    { id: 'timeline', label: 'Timeline', icon: <CheckCircle2 className="w-3.5 h-3.5" /> },
-    { id: 'github', label: 'GitHub', icon: <GitBranch className="w-3.5 h-3.5" /> },
-    { id: 'contact', label: 'Contact', icon: <Mail className="w-3.5 h-3.5" /> }
+  const navItems: { id: NavSection; label: string }[] = [
+    { id: 'home', label: 'Home' },
+    { id: 'about', label: 'About' },
+    { id: 'projects', label: 'Projects' },
+    { id: 'skills', label: 'Skills' },
+    { id: 'timeline', label: 'Experience' },
+    { id: 'contact', label: 'Contact' }
   ];
 
+  const handleLinkClick = (id: NavSection) => {
+    onNavigate(id);
+    setMobileMenuOpen(false);
+  };
+
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-slate-800/80 bg-[#090d16]/90 backdrop-blur-md">
-      {/* Top Telemetry / Status Bar */}
-      <div className="px-4 py-1.5 bg-[#05080f]/80 border-b border-slate-800/40 text-[11px] font-mono text-slate-400 flex items-center justify-between">
-        <div className="flex items-center space-x-3">
-          <div className="flex items-center space-x-1.5">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-            </span>
-            <span className="text-slate-200 font-semibold tracking-wider">GOPI OS v2.6</span>
-          </div>
-          <span className="text-slate-600 hidden sm:inline">|</span>
-          <span className="text-slate-400 hidden sm:inline">KERNEL: DETERMINISTIC</span>
-          <span className="text-slate-600 hidden md:inline">|</span>
-          <span className="text-slate-400 hidden md:inline">LATENCY: &lt; 14ms</span>
-          <span className="text-slate-600 hidden lg:inline">|</span>
-          <div 
-            className="flex items-center space-x-1 px-1.5 py-0.5 rounded bg-cyan-950/60 border border-cyan-800/40 text-cyan-300 font-mono text-[10px]"
-            title="Unique Visitors: Deduplicated per new user device/session"
-          >
-            <Users className="w-3 h-3 text-cyan-400" />
-            <span className="text-slate-400">UNIQUE USERS:</span>
-            <span className="font-bold text-cyan-300">
-              {visitorCount !== null ? visitorCount.toLocaleString() : '...'}
-            </span>
-          </div>
-        </div>
-
-        <div className="flex items-center space-x-3 sm:space-x-4">
-          <div className="text-cyan-400 font-mono font-medium hidden sm:block">
-            UTC {currentTime || '00:00:00'}
-          </div>
-
-          <button
-            id="nav-recruiter-toggle"
-            onClick={onToggleRecruiter}
-            className={`flex items-center space-x-1.5 px-2.5 py-0.5 rounded text-xs font-sans font-medium transition-all ${
-              recruiterMode
-                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/50 shadow-sm shadow-amber-500/10'
-                : 'bg-slate-800/80 text-slate-300 hover:bg-slate-700 hover:text-slate-100 border border-slate-700/60'
-            }`}
-            title="Toggle Recruiter Evaluation Mode"
-          >
-            <Briefcase className="w-3 h-3 text-amber-400" />
-            <span>{recruiterMode ? 'Standard View' : 'Recruiter Mode'}</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Main Nav Bar */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
-        {/* Brand / Logo */}
+    <header className="sticky top-0 z-50 w-full pt-3 pb-2 px-4 sm:px-6 pointer-events-none">
+      <div className="max-w-6xl mx-auto flex items-center justify-between pointer-events-auto">
+        {/* Logo */}
         <button
-          onClick={() => onNavigate('home')}
-          className="flex items-center space-x-2 text-left group cursor-pointer"
+          onClick={() => handleLinkClick('home')}
+          className="group flex items-center space-x-1.5 text-left py-2 px-3 rounded-xl bg-white/70 hover:bg-white/90 backdrop-blur-md border border-[#E6E6E8] shadow-sm transition-all"
         >
-          <div className="w-8 h-8 rounded bg-gradient-to-tr from-cyan-600 to-blue-600 flex items-center justify-center text-slate-950 font-bold font-mono text-sm shadow-md shadow-cyan-900/30 group-hover:scale-105 transition-transform">
-            G
-          </div>
-          <div className="flex flex-col">
-            <span className="text-sm font-bold tracking-tight text-slate-100 font-display group-hover:text-cyan-400 transition-colors">
-              Gopi Chinnapogu
-            </span>
-            <span className="text-[10px] font-mono text-cyan-400/80 -mt-1">
-              Software Systems Engineer
-            </span>
-          </div>
+          <span className="font-extrabold text-lg sm:text-xl tracking-tight text-[#151515] group-hover:text-[#C96F91] transition-colors">
+            GOPI
+          </span>
+          <span className="w-1.5 h-1.5 rounded-full bg-[#C96F91]"></span>
         </button>
 
-        {/* Desktop Navigation Links */}
-        <nav className="hidden lg:flex items-center space-x-1">
+        {/* Center Desktop Navigation Pill */}
+        <nav className="hidden md:flex items-center space-x-1 px-3 py-1.5 rounded-full bg-white/75 backdrop-blur-md border border-[#E6E6E8] shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]">
           {navItems.map((item) => {
-            const isActive = activeSection === item.id && !recruiterMode;
+            const isActive = activeSection === item.id;
             return (
               <button
                 key={item.id}
-                onClick={() => onNavigate(item.id)}
-                className={`flex items-center space-x-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium transition-all ${
+                onClick={() => handleLinkClick(item.id)}
+                className={`relative px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
                   isActive
-                    ? 'bg-cyan-950/80 text-cyan-300 border border-cyan-700/60 font-semibold shadow-xs'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                    ? 'text-[#C96F91] font-semibold bg-[#FCE7F0]/60 shadow-xs'
+                    : 'text-[#686873] hover:text-[#151515] hover:bg-[#F8F7F8]'
                 }`}
               >
-                {item.icon}
-                <span>{item.label}</span>
+                {item.label}
+                {isActive && (
+                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3 h-0.5 rounded-full bg-[#C96F91]" />
+                )}
               </button>
             );
           })}
+
+          {/* Quick CodeLab Shortcut */}
+          <button
+            onClick={() => handleLinkClick('lab')}
+            title="Open Interactive Compiler Lab"
+            className={`flex items-center space-x-1 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+              activeSection === 'lab'
+                ? 'text-[#C96F91] bg-[#FCE7F0]/60 font-semibold'
+                : 'text-[#686873] hover:text-[#151515] hover:bg-[#F8F7F8]'
+            }`}
+          >
+            <Code2 className="w-3.5 h-3.5" />
+            <span>Lab</span>
+          </button>
         </nav>
 
-        {/* Right Actions: Command Palette, AI Companion, Mobile Hamburger */}
+        {/* Right CTA and Utility Actions */}
         <div className="flex items-center space-x-2">
-          {/* ⌘K Command Palette Button */}
+          {/* AI Companion / Search Button */}
           <button
             onClick={onOpenCommandPalette}
-            className="flex items-center space-x-2 px-2.5 py-1.5 rounded-md bg-slate-900/90 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-800 text-xs font-mono transition-colors"
-            title="Open Command Palette (⌘K)"
+            title="Search & Quick Actions (⌘K)"
+            className="hidden sm:flex items-center justify-center w-10 h-10 rounded-xl bg-white/80 hover:bg-white backdrop-blur-md border border-[#E6E6E8] text-[#686873] hover:text-[#151515] shadow-xs transition-all"
           >
-            <Search className="w-3.5 h-3.5 text-slate-400" />
-            <span className="hidden md:inline">Command</span>
-            <kbd className="hidden sm:inline-block px-1.5 py-0.2 text-[10px] bg-slate-800 border border-slate-700 rounded text-slate-400 font-mono">
-              ⌘K
-            </kbd>
+            <Search className="w-4 h-4" />
           </button>
 
-          {/* AI Companion Trigger */}
+          {/* AI Assistant Button */}
           <button
-            id="nav-ai-button"
             onClick={onOpenAI}
-            className="flex items-center space-x-1.5 px-3 py-1.5 rounded-md bg-gradient-to-r from-cyan-950 to-blue-950 hover:from-cyan-900 hover:to-blue-900 text-cyan-300 border border-cyan-800/80 text-xs font-medium transition-all shadow-xs"
+            title="Grounded AI Assistant"
+            className="hidden sm:flex items-center space-x-1.5 px-3 py-2 rounded-xl bg-white/80 hover:bg-white backdrop-blur-md border border-[#E6E6E8] text-[#686873] hover:text-[#C96F91] text-xs font-medium shadow-xs transition-all"
           >
-            <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-            <span className="hidden sm:inline">Ask AI</span>
+            <Sparkles className="w-3.5 h-3.5 text-[#C96F91]" />
+            <span>Ask AI</span>
           </button>
 
-          {/* Mobile Hamburger */}
+          {/* Primary CTA Button: "Let’s Talk →" */}
+          <button
+            onClick={() => handleLinkClick('contact')}
+            className="flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-[#C96F91] hover:bg-[#B85B80] active:scale-98 text-white text-sm font-medium shadow-[0_4px_14px_rgba(201,111,145,0.3)] transition-all"
+          >
+            <span>Let’s Talk</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
+
+          {/* Mobile Hamburger Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 rounded-md text-slate-400 hover:text-slate-200 hover:bg-slate-800 focus:outline-none"
+            className="md:hidden flex items-center justify-center w-10 h-10 rounded-xl bg-white/80 backdrop-blur-md border border-[#E6E6E8] text-[#151515] shadow-xs"
             aria-label="Toggle menu"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -190,26 +132,57 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
       </div>
 
-      {/* Mobile Drawer Navigation Menu */}
+      {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-t border-slate-800 bg-[#070b14]/95 px-4 py-3 space-y-1">
-          {navItems.map((item) => (
+        <div className="md:hidden mt-2 max-w-sm mx-auto p-4 rounded-2xl bg-white/95 backdrop-blur-xl border border-[#E6E6E8] shadow-[0_12px_36px_rgba(0,0,0,0.08)] pointer-events-auto animate-in fade-in slide-in-from-top-2 duration-200">
+          <div className="space-y-1">
+            {navItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => handleLinkClick(item.id)}
+                className={`w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${
+                  activeSection === item.id
+                    ? 'text-[#C96F91] font-semibold bg-[#FCE7F0]/70'
+                    : 'text-[#686873] hover:text-[#151515] hover:bg-[#F8F7F8]'
+                }`}
+              >
+                {item.label}
+              </button>
+            ))}
+
             <button
-              key={item.id}
-              onClick={() => {
-                onNavigate(item.id);
-                setMobileMenuOpen(false);
-              }}
-              className={`w-full flex items-center space-x-3 px-3 py-2 rounded-md text-xs font-medium ${
-                activeSection === item.id
-                  ? 'bg-cyan-950 text-cyan-300 border border-cyan-800'
-                  : 'text-slate-300 hover:bg-slate-800/60'
+              onClick={() => handleLinkClick('lab')}
+              className={`w-full flex items-center space-x-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${
+                activeSection === 'lab'
+                  ? 'text-[#C96F91] font-semibold bg-[#FCE7F0]/70'
+                  : 'text-[#686873] hover:text-[#151515] hover:bg-[#F8F7F8]'
               }`}
             >
-              {item.icon}
-              <span>{item.label}</span>
+              <Code2 className="w-4 h-4 text-[#C96F91]" />
+              <span>Interactive CodeLab</span>
             </button>
-          ))}
+          </div>
+
+          <div className="mt-4 pt-4 border-t border-[#E6E6E8] space-y-2">
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onOpenAI();
+              }}
+              className="w-full flex items-center justify-center space-x-2 py-2.5 rounded-xl bg-[#F8F7F8] hover:bg-[#EEF0F3] text-[#151515] text-sm font-medium border border-[#E6E6E8]"
+            >
+              <Sparkles className="w-4 h-4 text-[#C96F91]" />
+              <span>Ask AI About Gopi</span>
+            </button>
+
+            <button
+              onClick={() => handleLinkClick('contact')}
+              className="w-full flex items-center justify-center space-x-2 py-3 rounded-xl bg-[#C96F91] text-white text-sm font-medium shadow-sm"
+            >
+              <span>Let’s Talk</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       )}
     </header>

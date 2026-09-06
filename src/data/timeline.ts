@@ -2,63 +2,71 @@ import { TimelineMilestone } from '../types';
 
 export const timelineData: TimelineMilestone[] = [
   {
-    id: '2026-present',
-    year: '2026',
-    period: 'Current / Engineering Deepening',
-    title: 'Distributed Backends & Applied AI Systems',
-    roleOrContext: 'Systems Engineer & Applied AI Research',
-    category: 'research',
-    summary: 'Focusing on high-throughput asynchronous job dispatchers, strict LLM grounding pipelines, and low-latency API architectures.',
-    highlights: [
-      'Engineered GOPI OS flagship interactive portfolio environment',
-      'Developed Grounded RAG validation system achieving zero-hallucination factual bounds',
-      'Implemented token-bucket and ring-buffer streaming telemetry analyzers',
-      'Active contributions to open source TypeScript & Java system utilities'
-    ],
-    technologies: ['TypeScript', 'Node.js', 'Java 21', 'Gemini API', 'Docker', 'Redis']
-  },
-  {
-    id: '2025-systems',
-    year: '2025',
-    period: 'Full-Stack Architecture & Distributed Concepts',
-    title: 'Full-Stack Engineering & Microservice Patterns',
-    roleOrContext: 'B.Tech CS Engineering & Projects',
-    category: 'project',
-    summary: 'Built production-style web services with Express, TypeScript, and SQL. Deepened knowledge in database indexing and concurrency.',
-    highlights: [
-      'Solved 300+ LeetCode algorithmic and data structure problems with focus on DP, Graphs, and Invariants',
-      'Built Distributed Task Orchestrator with retry backoff and dead-letter queues',
-      'Mastered containerization, multi-stage Docker builds, and automated CI pipelines'
-    ],
-    technologies: ['Java', 'SQL (PostgreSQL)', 'Express', 'React', 'Docker', 'Git']
-  },
-  {
-    id: '2024-dsa-java',
-    year: '2024',
-    period: 'Core Computer Science Foundations',
-    title: 'Data Structures, OOP Mastery & Java Concurrency',
-    roleOrContext: 'Computer Science Undergraduate',
+    id: 'btech-cs',
+    year: '2022 - 2026',
+    period: '2022 - 2026',
+    title: 'B.Tech in Computer Science',
+    roleOrContext: 'KL University, Vijayawada',
+    institution: 'KL University, Vijayawada',
+    badge: 'Education',
     category: 'education',
-    summary: 'Established fundamental bedrock in Object-Oriented Programming, memory models, JVM internals, and asymptotic complexity.',
+    summary: 'Currently pursuing Computer Science & Engineering with CGPA: 8.5 (approx). Deep coursework in Data Structures, Algorithms, Operating Systems, and DBMS.',
     highlights: [
-      'Studied Computer Architecture, Operating Systems (Process Scheduling, Virtual Memory), and DBMS',
-      'Implemented custom data structures: B-Trees, Red-Black Trees, Priority Queues from scratch',
-      'Explored multi-threaded Java applications using java.util.concurrent'
+      'Core coursework: Data Structures, Algorithms, Operating Systems, Computer Networks, DBMS',
+      'Actively building full-stack products and systems architecture projects',
+      'Maintaining strong academic record with ~8.5 CGPA'
     ],
-    technologies: ['Java (Core & OOP)', 'C++', 'Data Structures & Algorithms', 'Linux']
+    technologies: ['Java', 'C/C++', 'Python', 'SQL', 'Computer Networks', 'OS']
   },
   {
-    id: '2023-foundations',
-    year: '2023',
-    period: 'The Beginning of the Journey',
-    title: 'Initiated Programming & Software Fundamentals',
-    roleOrContext: 'Undergraduate Program Entry',
-    category: 'milestone',
-    summary: 'Wrote first lines of code in C and Python. Discovered deep curiosity for how computer systems process logic and memory.',
+    id: 'internship-oasis',
+    year: '2024',
+    period: '2024',
+    title: 'Web Development Intern',
+    roleOrContext: 'Oasis Infobyte',
+    institution: 'Oasis Infobyte',
+    badge: 'Internship',
+    category: 'internship',
+    summary: 'Worked on real-world web projects and significantly enhanced frontend engineering, responsive design, and component architecture skills.',
     highlights: [
-      'Built algorithmic problem-solving habits and foundational math/logic reasoning',
-      'Created terminal utilities, basic CLI games, and automated data scripts in Python'
+      'Developed responsive, accessible web applications with modern component libraries',
+      'Collaborated with engineering mentors on code reviews and agile sprint workflows',
+      'Optimized asset loading and mobile performance across client deliverables'
     ],
-    technologies: ['C', 'Python', 'Git', 'Linux Basics']
+    technologies: ['HTML5', 'CSS3', 'JavaScript', 'React', 'Git']
+  },
+  {
+    id: 'python-cert',
+    year: '2023',
+    period: '2023',
+    title: 'Completed Python Certification',
+    roleOrContext: 'Coursera',
+    institution: 'Coursera',
+    badge: 'Certification',
+    category: 'certification',
+    summary: 'Learned core Python syntax, object-oriented concepts, algorithmic problem solving, and script automation.',
+    highlights: [
+      'Mastered Python data structures, algorithms, and computational thinking',
+      'Built automated data processing utilities and command-line tools',
+      'Graduated with honors and practical capstone project submission'
+    ],
+    technologies: ['Python', 'DSA', 'OOP', 'Automation']
+  },
+  {
+    id: 'systems-builder',
+    year: '2025 - 2026',
+    period: '2025 - 2026',
+    title: 'Distributed Systems & Applied AI Builder',
+    roleOrContext: 'Systems Engineer & Independent Builder',
+    institution: 'Independent Research & Open Source',
+    badge: 'Experience',
+    category: 'experience',
+    summary: 'Engineered high-throughput task dispatchers, grounded RAG verification pipelines, and interactive developer tooling.',
+    highlights: [
+      'Created GOPI OS interactive developer environment with real-time compiler failover',
+      'Solved 450+ LeetCode algorithmic and data structure problems with invariant proofs',
+      'Contributed to open source systems utilities and TypeScript developer tools'
+    ],
+    technologies: ['TypeScript', 'Node.js', 'Java 21', 'Docker', 'Redis', 'Gemini API']
   }
 ];

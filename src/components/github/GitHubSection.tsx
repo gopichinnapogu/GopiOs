@@ -21,11 +21,20 @@ export const GitHubSection: React.FC = () => {
     setLoading(true);
     try {
       const res = await fetch('/api/github');
-      if (res.ok) {
+      if (res.ok && res.headers.get('content-type')?.includes('application/json')) {
         const json = await res.json();
         setRepos(json.data.repos || []);
         setUserData(json.data.user || null);
         setDataSource(json.source || 'cache');
+        return;
+      }
+      
+      // Direct client-side fetch from public GitHub API for static hosting environments (Netlify, etc.)
+      const publicRes = await fetch('https://api.github.com/users/gopichinnapogu/repos?per_page=6&sort=pushed');
+      if (publicRes.ok) {
+        const publicRepos = await publicRes.json();
+        setRepos(publicRepos.slice(0, 6));
+        setDataSource('public-api');
       }
     } catch (err) {
       console.warn('Failed to fetch GitHub data:', err);

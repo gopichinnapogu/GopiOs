@@ -1,238 +1,170 @@
-import React, { useState } from 'react';
-import { motion } from 'motion/react';
+import React from 'react';
 import { 
-  Terminal, 
   ArrowRight, 
-  Sparkles, 
-  Briefcase, 
-  Cpu, 
-  CheckCircle2, 
-  Code2, 
-  Layers, 
-  Download,
-  Copy,
-  Check
+  Download, 
+  ChevronDown,
+  Sparkles,
+  Heart
 } from 'lucide-react';
 import { profileData } from '../../data/profile';
 import { NavSection } from '../../types';
 
 interface HeroSectionProps {
   onNavigate: (section: NavSection) => void;
-  onOpenRecruiter: () => void;
+  onOpenRecruiter?: () => void;
   onOpenAI: () => void;
   onOpenResume: () => void;
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
   onNavigate,
-  onOpenRecruiter,
-  onOpenAI,
   onOpenResume
 }) => {
-  const [copiedEmail, setCopiedEmail] = useState(false);
-  const [cliInput, setCliInput] = useState('');
-  const [cliOutput, setCliOutput] = useState<string>('Type "help" or "skills" to execute system commands.');
-
-  const handleCopyEmail = () => {
-    navigator.clipboard.writeText(profileData.email);
-    setCopiedEmail(true);
-    setTimeout(() => setCopiedEmail(false), 2000);
-  };
-
-  const handleCliSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const cmd = (cliInput || '').trim().toLowerCase();
-    setCliInput('');
-
-    switch (cmd) {
-      case 'help':
-        setCliOutput('Available commands: skills, projects, dsa, contact, recruiter, ai, clear');
-        break;
-      case 'skills':
-        setCliOutput('Primary Stack: Java 21, TypeScript, Python, SQL, Express, Gemini RAG, Docker');
-        break;
-      case 'projects':
-        setCliOutput('Flagship: 1. GOPI OS Core  2. Distributed Orchestrator  3. Grounded RAG  4. Log Stream');
-        break;
-      case 'dsa':
-        setCliOutput('DSA Focus: 450+ solved. Specialized in Monotonic Queues, DP Invariants, and Graph Algorithms.');
-        break;
-      case 'recruiter':
-        onOpenRecruiter();
-        setCliOutput('Switching to Recruiter 45-second high impact overview...');
-        break;
-      case 'ai':
-        onOpenAI();
-        setCliOutput('Opening Grounded AI Assistant Drawer...');
-        break;
-      case 'contact':
-        onNavigate('contact');
-        setCliOutput(`Contact Gopi directly at: ${profileData.email}`);
-        break;
-      case 'clear':
-        setCliOutput('');
-        break;
-      default:
-        setCliOutput(`Command not recognized: "${cmd}". Type "help" for available commands.`);
-    }
-  };
-
   return (
-    <section id="home" className="relative pt-12 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden">
-      {/* Background Radial Glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-96 bg-radial-glow pointer-events-none -z-10" />
+    <section id="home" className="relative pt-6 sm:pt-12 pb-20 sm:pb-28 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto overflow-hidden">
+      {/* Background Soft Rose Glows */}
+      <div className="absolute top-1/4 right-10 w-96 h-96 rounded-full bg-[#E8A0B8]/15 blur-3xl pointer-events-none -z-10" />
+      <div className="absolute -top-10 left-10 w-80 h-80 rounded-full bg-[#F8F7F8] blur-2xl pointer-events-none -z-10" />
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-        {/* Left Column: Hero Narrative */}
-        <div className="lg:col-span-7 space-y-6">
-          {/* Status Badge */}
-          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-slate-900/90 border border-slate-800 text-xs font-mono">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+        {/* Left Column: Headline & Bio */}
+        <div className="lg:col-span-7 space-y-6 sm:space-y-8 text-left">
+          {/* Eyebrow Pill */}
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#FCE7F0] border border-[#E8A0B8]/40 shadow-2xs">
+            <span className="w-2 h-2 rounded-full bg-[#C96F91] animate-pulse" />
+            <span className="text-xs font-semibold text-[#C96F91] tracking-wide">
+              Hi, I'm Gopi
             </span>
-            <span className="text-slate-300">Software Engineer & Systems Builder</span>
-            <span className="text-slate-600">•</span>
-            <span className="text-cyan-400 font-semibold">{profileData.location.split('(')[0].trim()}</span>
+            <span className="text-[#E8A0B8]">•</span>
+            <span className="text-xs font-medium text-[#686873]">
+              Developer • Problem Solver • Lifelong Learner
+            </span>
           </div>
 
-          {/* Main Headline */}
-          <div className="space-y-2">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold font-display tracking-tight text-slate-100 leading-[1.1]">
-              Architecting <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-blue-500">Resilient Systems</span> & Grounded AI.
+          {/* Main Display Headline */}
+          <div className="space-y-1">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#151515] leading-[1.12]">
+              Building <br className="hidden sm:inline" />
+              Ideas Into <br />
+              <span className="text-[#C96F91]">Real Products</span>
             </h1>
-            <p className="text-base sm:text-lg text-slate-300 font-sans leading-relaxed max-w-2xl pt-2">
-              Hi, I'm <strong className="text-slate-100 font-semibold">Gopi Chinnapogu</strong>. I build high-throughput backend services, distributed task dispatchers, and zero-hallucination factual AI engines with strict type safety and mechanical sympathy.
-            </p>
           </div>
 
-          {/* Quick Technical Badges */}
-          <div className="flex flex-wrap gap-2 pt-1 font-mono text-xs">
-            {['Java 21 & Concurrency', 'TypeScript / Node.js', 'Distributed Systems', 'Grounded RAG (Gemini)', 'SQL & Invariant DSA'].map((badge, idx) => (
-              <span 
-                key={idx} 
-                className="px-2.5 py-1 rounded bg-slate-800/80 text-slate-300 border border-slate-700/60"
-              >
-                {badge}
-              </span>
-            ))}
-          </div>
-
-          {/* Key Metric Telemetry */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
-            <div className="p-3 rounded-lg bg-[#0b1222]/80 border border-slate-800/80">
-              <div className="text-2xl font-bold font-mono text-cyan-400">450+</div>
-              <div className="text-xs text-slate-400 font-sans">DSA Solved</div>
-            </div>
-            <div className="p-3 rounded-lg bg-[#0b1222]/80 border border-slate-800/80">
-              <div className="text-2xl font-bold font-mono text-emerald-400">8+</div>
-              <div className="text-xs text-slate-400 font-sans">Shipped Projects</div>
-            </div>
-            <div className="p-3 rounded-lg bg-[#0b1222]/80 border border-slate-800/80">
-              <div className="text-2xl font-bold font-mono text-blue-400">&lt; 14ms</div>
-              <div className="text-xs text-slate-400 font-sans">P99 System Latency</div>
-            </div>
-            <div className="p-3 rounded-lg bg-[#0b1222]/80 border border-slate-800/80">
-              <div className="text-2xl font-bold font-mono text-amber-400">99.9%</div>
-              <div className="text-xs text-slate-400 font-sans">Factual Precision</div>
-            </div>
-          </div>
+          {/* Supporting Bio Text */}
+          <p className="text-base sm:text-lg text-[#686873] max-w-xl leading-relaxed font-normal">
+            A passionate developer who loves creating clean, scalable and user-friendly digital experiences. Specializing in full-stack web applications, modern APIs, and reliable software systems.
+          </p>
 
           {/* Action CTAs */}
-          <div className="flex flex-wrap items-center gap-3 pt-4">
+          <div className="flex flex-wrap items-center gap-4 pt-1">
             <button
-              id="hero-btn-projects"
               onClick={() => onNavigate('projects')}
-              className="px-5 py-2.5 rounded-md bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs sm:text-sm transition-all flex items-center gap-2 shadow-lg shadow-cyan-500/20"
+              className="flex items-center space-x-2 px-6 py-3.5 rounded-xl bg-[#C96F91] hover:bg-[#B85B80] active:scale-98 text-white text-sm sm:text-base font-semibold shadow-[0_4px_16px_rgba(201,111,145,0.35)] transition-all group"
             >
-              <span>Explore Projects</span>
-              <ArrowRight className="w-4 h-4" />
+              <span>View My Work</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
 
             <button
-              id="hero-btn-recruiter"
-              onClick={onOpenRecruiter}
-              className="px-4 py-2.5 rounded-md bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 font-medium text-xs sm:text-sm border border-amber-500/40 transition-colors flex items-center gap-2"
+              onClick={onOpenResume}
+              className="flex items-center space-x-2 px-6 py-3.5 rounded-xl bg-[#F8F7F8] hover:bg-[#EEF0F3] active:scale-98 text-[#151515] text-sm sm:text-base font-semibold border border-[#E6E6E8] shadow-2xs transition-all"
             >
-              <Briefcase className="w-4 h-4 text-amber-400" />
-              <span>Recruiter 45s View</span>
+              <Download className="w-4 h-4 text-[#686873]" />
+              <span>Download Resume</span>
             </button>
+          </div>
 
-            <button
-              id="hero-btn-ai"
-              onClick={onOpenAI}
-              className="px-4 py-2.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium text-xs sm:text-sm border border-slate-700 transition-colors flex items-center gap-2"
-            >
-              <Sparkles className="w-4 h-4 text-cyan-400" />
-              <span>Ask AI Companion</span>
-            </button>
+          {/* Statistics Metric Row */}
+          <div className="pt-6 border-t border-[#E6E6E8] flex items-center space-x-8 sm:space-x-12">
+            <div>
+              <div className="text-2xl sm:text-3xl font-extrabold text-[#151515] tracking-tight">
+                5+
+              </div>
+              <div className="text-xs sm:text-sm font-medium text-[#686873] mt-0.5">
+                Projects
+              </div>
+            </div>
 
-            <button
-              id="hero-btn-copy-email"
-              onClick={handleCopyEmail}
-              className="px-3 py-2.5 rounded-md bg-slate-900/80 hover:bg-slate-800 text-slate-400 hover:text-slate-200 text-xs font-mono border border-slate-800 transition-colors flex items-center gap-1.5"
-              title="Copy Email Address"
-            >
-              {copiedEmail ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-              <span>{copiedEmail ? 'Copied!' : 'Copy Email'}</span>
-            </button>
+            <div className="h-8 w-px bg-[#E6E6E8]" />
+
+            <div>
+              <div className="text-2xl sm:text-3xl font-extrabold text-[#151515] tracking-tight">
+                1+
+              </div>
+              <div className="text-xs sm:text-sm font-medium text-[#686873] mt-0.5">
+                Years Experience
+              </div>
+            </div>
+
+            <div className="h-8 w-px bg-[#E6E6E8]" />
+
+            <div>
+              <div className="text-2xl sm:text-3xl font-extrabold text-[#151515] tracking-tight">
+                100%
+              </div>
+              <div className="text-xs sm:text-sm font-medium text-[#686873] mt-0.5">
+                Dedication
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Right Column: Interactive Mini CLI Terminal */}
-        <div className="lg:col-span-5">
-          <div className="rounded-lg bg-[#0b1120] border border-cyan-900/60 shadow-xl overflow-hidden font-mono text-xs">
-            {/* Terminal Header */}
-            <div className="px-4 py-2.5 bg-[#070b14] border-b border-slate-800 flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <div className="w-2.5 h-2.5 rounded-full bg-red-500/80"></div>
-                <div className="w-2.5 h-2.5 rounded-full bg-amber-500/80"></div>
-                <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></div>
-                <span className="text-[11px] text-slate-400 ml-2 font-semibold">gopi@kernel:~$</span>
-              </div>
-              <span className="text-[10px] text-cyan-400 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-800/40">
-                LIVE TERMINAL
-              </span>
+        {/* Right Column: Hero Portrait Composition with Glass Cards */}
+        <div className="lg:col-span-5 flex justify-center relative">
+          <div className="relative w-full max-w-[360px] sm:max-w-[400px]">
+            {/* Soft Circular Rose Halo Aura Behind Portrait */}
+            <div className="absolute inset-0 -m-6 rounded-full bg-gradient-to-tr from-[#E8A0B8]/40 via-[#FCE7F0]/60 to-transparent blur-2xl -z-10" />
+
+            {/* Hand-written Top Accent Flourish */}
+            <div className="absolute -top-8 -right-4 hidden sm:flex items-center space-x-1.5 text-[#C96F91] font-handwriting text-2xl tracking-wide rotate-6 pointer-events-none select-none">
+              <span>Ideas to Impact</span>
+              <Sparkles className="w-4 h-4" />
             </div>
 
-            {/* Terminal Content Body */}
-            <div className="p-4 space-y-3 min-h-[220px] max-h-[300px] overflow-y-auto">
-              <div className="text-slate-400">
-                <span className="text-cyan-400 font-bold">&gt;</span> Gopi Chinnapogu (CSE B.Tech)
-              </div>
-              <div className="text-slate-400">
-                <span className="text-cyan-400 font-bold">&gt;</span> Status: Ready for high-impact software engineering roles
-              </div>
-              <div className="text-slate-400">
-                <span className="text-cyan-400 font-bold">&gt;</span> Architecture: Zero-overhead deterministic design
-              </div>
-
-              {cliOutput && (
-                <div className="p-2.5 rounded bg-[#070d1a] border border-cyan-900/40 text-cyan-300 whitespace-pre-wrap leading-relaxed">
-                  {cliOutput}
-                </div>
-              )}
-            </div>
-
-            {/* Quick Interactive Command Bar */}
-            <form onSubmit={handleCliSubmit} className="p-3 bg-[#070b14] border-t border-slate-800 flex items-center gap-2">
-              <span className="text-cyan-400 font-bold">$</span>
-              <input
-                type="text"
-                value={cliInput}
-                onChange={(e) => setCliInput(e.target.value)}
-                placeholder="Try: skills, projects, dsa, recruiter..."
-                className="flex-1 bg-transparent text-slate-200 placeholder-slate-600 focus:outline-none text-xs font-mono"
+            {/* Main Portrait Frame */}
+            <div className="relative rounded-3xl overflow-hidden bg-gradient-to-b from-[#FCE7F0]/40 to-[#F8F7F8] border border-white shadow-[0_20px_50px_rgba(0,0,0,0.06)] aspect-[4/5]">
+              <img
+                src="/gopi_portrait.jpg"
+                alt={profileData.name}
+                className="w-full h-full object-cover object-center transform hover:scale-102 transition-transform duration-500"
               />
-              <button
-                type="submit"
-                className="px-2.5 py-1 bg-cyan-900/60 hover:bg-cyan-800 text-cyan-200 text-[11px] rounded border border-cyan-700/50"
-              >
-                Execute
-              </button>
-            </form>
+
+              {/* Bottom Subtle Glass Card */}
+              <div className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 px-4 py-2.5 rounded-2xl bg-white/80 backdrop-blur-md border border-white/90 shadow-[0_8px_24px_rgba(0,0,0,0.08)] flex items-center space-x-2">
+                <div className="w-2 h-2 rounded-full bg-[#C96F91] animate-ping" />
+                <span className="font-handwriting text-lg text-[#151515] font-bold">
+                  Keep Building
+                </span>
+                <Heart className="w-3.5 h-3.5 text-[#C96F91] fill-[#C96F91]" />
+              </div>
+            </div>
+
+            {/* Left Micro Floating Glass Card */}
+            <div className="absolute -bottom-4 -left-4 sm:-bottom-5 sm:-left-6 px-4 py-2.5 rounded-2xl bg-white/85 backdrop-blur-md border border-[#E6E6E8] shadow-[0_10px_28px_rgba(0,0,0,0.06)]">
+              <div className="text-[10px] uppercase font-semibold tracking-wider text-[#686873]">
+                Current Focus
+              </div>
+              <div className="text-xs font-bold text-[#151515] mt-0.5 flex items-center space-x-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                <span>Full-Stack & Systems</span>
+              </div>
+            </div>
           </div>
         </div>
+      </div>
+
+      {/* Subtle Scroll Down Prompt */}
+      <div className="mt-14 sm:mt-20 flex flex-col items-center justify-center text-center">
+        <button
+          onClick={() => onNavigate('about')}
+          className="group flex flex-col items-center space-y-1.5 text-[#686873] hover:text-[#C96F91] transition-colors"
+          aria-label="Scroll to About section"
+        >
+          <span className="text-xs font-medium tracking-wider uppercase">Scroll Down</span>
+          <div className="w-7 h-11 rounded-full border-2 border-[#D5D7DD] group-hover:border-[#C96F91] flex items-start justify-center p-1.5 transition-colors">
+            <div className="w-1.5 h-2.5 rounded-full bg-[#686873] group-hover:bg-[#C96F91] animate-bounce transition-colors" />
+          </div>
+        </button>
       </div>
     </section>
   );

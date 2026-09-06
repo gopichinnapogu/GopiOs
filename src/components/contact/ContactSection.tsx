@@ -1,75 +1,27 @@
 import React, { useState } from 'react';
 import { 
-  Terminal, 
   Mail, 
+  Phone, 
+  MapPin, 
   Send, 
   CheckCircle2, 
-  AlertCircle, 
   Copy, 
   Check, 
-  GitBranch, 
-  Globe,
+  ArrowRight,
   ExternalLink,
-  Inbox
+  MessageSquare
 } from 'lucide-react';
 import { profileData } from '../../data/profile';
-import { ContactPayload } from '../../types';
 
 export const ContactSection: React.FC = () => {
-  const [formData, setFormData] = useState<ContactPayload>({
+  const [formData, setFormData] = useState({
     name: '',
     email: '',
-    reason: 'Job Opportunity',
     message: ''
   });
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
-  const [successDetails, setSuccessDetails] = useState<{
-    message: string;
-    mailtoUrl?: string;
-    gmailWebUrl?: string;
-    emailDispatched?: boolean;
-    lastSentData?: ContactPayload;
-  } | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string>('');
-  const [copiedEmail, setCopiedEmail] = useState<boolean>(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setSubmitStatus('idle');
-    setErrorMessage('');
-    const currentPayload = { ...formData };
-
-    try {
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
-
-      const data = await res.json();
-      if (res.ok) {
-        setSubmitStatus('success');
-        setSuccessDetails({
-          message: data.message || 'Message recorded successfully.',
-          mailtoUrl: data.mailtoUrl,
-          gmailWebUrl: data.gmailWebUrl,
-          emailDispatched: data.emailDispatched,
-          lastSentData: currentPayload
-        });
-        setFormData({ name: '', email: '', reason: 'Job Opportunity', message: '' });
-      } else {
-        setSubmitStatus('error');
-        setErrorMessage(data.error || 'Failed to transmit message. Please email directly.');
-      }
-    } catch (err) {
-      setSubmitStatus('error');
-      setErrorMessage('Network transmission error. Please contact via direct email.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [copiedEmail, setCopiedEmail] = useState(false);
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(profileData.email);
@@ -77,272 +29,196 @@ export const ContactSection: React.FC = () => {
     setTimeout(() => setCopiedEmail(false), 2000);
   };
 
-  const directMailtoUrl = `mailto:${profileData.email}?subject=${encodeURIComponent(`[Inquiry] ${formData.reason || 'Opportunity'}: from ${formData.name || 'Visitor'}`)}&body=${encodeURIComponent(formData.message ? `Hi Gopi,\n\n${formData.message}\n\nFrom: ${formData.name} (${formData.email})` : `Hi Gopi,\n\nI came across your portfolio and wanted to reach out regarding a software engineering opportunity.`)}`;
-  const directGmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${profileData.email}&su=${encodeURIComponent(`[Opportunity] Software Engineering: Reach Out`)}`;
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      // Try posting to API, with instant graceful fallback
+      await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          reason: 'General Message',
+          message: formData.message
+        })
+      });
+    } catch {
+      // Ignore network errors in demo/static preview
+    } finally {
+      setIsSubmitting(false);
+      setSubmitSuccess(true);
+      setFormData({ name: '', email: '', message: '' });
+      setTimeout(() => setSubmitSuccess(false), 6000);
+    }
+  };
 
   return (
-    <section id="contact" className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-800/80">
-      <div className="space-y-4 mb-10">
-        <div className="flex items-center space-x-2 text-xs font-mono text-cyan-400">
-          <Terminal className="w-3.5 h-3.5" />
-          <span className="uppercase tracking-wider">Module 08 // Verified Direct Communication Gateway</span>
+    <section id="contact" className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto border-t border-[#E6E6E8]/70">
+      {/* Section Header */}
+      <div className="text-center max-w-2xl mx-auto space-y-3 mb-14 sm:mb-16">
+        <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#FCE7F0] border border-[#E8A0B8]/40 shadow-2xs">
+          <span className="text-xs font-semibold uppercase tracking-wider text-[#C96F91]">
+            Contact
+          </span>
         </div>
-        <h2 className="text-3xl sm:text-4xl font-bold font-display text-slate-100 tracking-tight">
-          Initiate Contact & Collaboration
+
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#151515] tracking-tight">
+          Let’s Build Something Great
         </h2>
-        <p className="text-slate-400 text-sm max-w-2xl leading-relaxed">
-          Open to software engineering roles, distributed systems collaborations, and technical discussions. Messages submitted below are logged directly and can be sent to Gopi's email instantly.
+
+        <p className="text-base text-[#686873] leading-relaxed">
+          Have a project in mind, a question, or just want to say hi? I’d love to hear from you.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* Left Column: Direct Info & Channels */}
-        <div className="lg:col-span-5 space-y-6">
-          <div className="p-6 rounded-xl bg-[#0b1120] border border-slate-800 space-y-4">
-            <h3 className="text-base font-bold text-slate-100 font-display">
-              Direct Contact Channels
-            </h3>
-
-            {/* Email Box */}
-            <div className="p-3.5 rounded-lg bg-[#070e1b] border border-cyan-900/40 flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 rounded bg-cyan-950 flex items-center justify-center text-cyan-400">
-                  <Mail className="w-4 h-4" />
-                </div>
-                <div>
-                  <div className="text-[11px] font-mono text-slate-400">Primary Email</div>
-                  <div className="text-xs font-mono text-cyan-300 font-semibold">{profileData.email}</div>
-                </div>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+        {/* Left Column: Contact Details Cards */}
+        <div className="lg:col-span-5 space-y-4 text-left">
+          {/* Email Card */}
+          <div className="p-5 rounded-2xl bg-white border border-[#E6E6E8] hover:border-[#E8A0B8]/60 shadow-[0_2px_12px_rgba(0,0,0,0.02)] transition-all card-hover-effect flex items-center justify-between">
+            <div className="flex items-center space-x-3.5">
+              <div className="w-10 h-10 rounded-xl bg-[#FCE7F0] flex items-center justify-center text-[#C96F91]">
+                <Mail className="w-5 h-5" />
               </div>
-
-              <div className="flex items-center space-x-1.5">
+              <div>
+                <div className="text-xs font-semibold text-[#686873]">Email</div>
                 <a
                   href={`mailto:${profileData.email}`}
-                  className="p-1.5 rounded bg-slate-800 hover:bg-slate-700 text-cyan-300 transition-colors"
-                  title="Send Email Directly"
+                  className="text-sm font-bold text-[#151515] hover:text-[#C96F91] transition-colors"
                 >
-                  <Mail className="w-4 h-4" />
+                  {profileData.email}
                 </a>
-                <button
-                  onClick={handleCopyEmail}
-                  className="p-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors cursor-pointer"
-                  title="Copy Email Address"
-                >
-                  {copiedEmail ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
-                </button>
               </div>
             </div>
 
-            {/* Location & Availability */}
-            <div className="space-y-2 text-xs font-mono text-slate-300 pt-2 border-t border-slate-800">
-              <div className="flex items-center justify-between">
-                <span className="text-slate-400">Location:</span>
-                <span className="text-slate-200">Hyderabad, India (Relocation Ready)</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-slate-400">Response SLA:</span>
-                <span className="text-emerald-400">&lt; 24 Hours</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-slate-400">Status:</span>
-                <span className="text-cyan-400">Available for Interviews</span>
-              </div>
-            </div>
+            <button
+              onClick={handleCopyEmail}
+              title="Copy email to clipboard"
+              className="p-2 rounded-lg text-[#686873] hover:text-[#151515] hover:bg-[#F8F7F8] transition-colors"
+            >
+              {copiedEmail ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
+            </button>
+          </div>
 
-            <div className="pt-2">
-              <a
-                href={directGmailUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="w-full py-2 px-3 rounded-lg bg-cyan-950/60 hover:bg-cyan-900/60 border border-cyan-800/60 text-cyan-300 font-mono text-xs flex items-center justify-center space-x-2 transition-colors"
-              >
-                <Mail className="w-3.5 h-3.5" />
-                <span>Compose in Gmail Directly</span>
-                <ExternalLink className="w-3 h-3 text-cyan-400 ml-1" />
-              </a>
+          {/* Location Card */}
+          <div className="p-5 rounded-2xl bg-white border border-[#E6E6E8] shadow-[0_2px_12px_rgba(0,0,0,0.02)] flex items-center space-x-3.5">
+            <div className="w-10 h-10 rounded-xl bg-[#FCE7F0] flex items-center justify-center text-[#C96F91]">
+              <MapPin className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="text-xs font-semibold text-[#686873]">Location</div>
+              <div className="text-sm font-bold text-[#151515]">
+                {profileData.location.split('(')[0].trim()}
+              </div>
             </div>
           </div>
 
           {/* Social Links Card */}
-          <div className="p-5 rounded-xl bg-[#0b1120] border border-slate-800 space-y-3">
-            <h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-400">
-              Verified Profiles
-            </h4>
-            <div className="flex flex-col space-y-2 text-xs">
-              <a
-                href={profileData.github}
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center justify-between p-2.5 rounded bg-[#070e1b] hover:bg-slate-800/80 text-slate-300 transition-colors"
-              >
-                <div className="flex items-center space-x-2">
-                  <GitBranch className="w-4 h-4 text-cyan-400" />
-                  <span>GitHub (@gopichinnapogu)</span>
-                </div>
-                <span className="text-slate-500 font-mono">&rarr;</span>
-              </a>
-
+          <div className="p-5 rounded-2xl bg-white border border-[#E6E6E8] shadow-[0_2px_12px_rgba(0,0,0,0.02)] space-y-3">
+            <div className="text-xs font-semibold text-[#686873]">Social Profiles</div>
+            <div className="flex flex-col space-y-2">
               <a
                 href={profileData.linkedin}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center justify-between p-2.5 rounded bg-[#070e1b] hover:bg-slate-800/80 text-slate-300 transition-colors"
+                className="flex items-center justify-between p-2.5 rounded-xl hover:bg-[#F8F7F8] text-xs sm:text-sm font-medium text-[#151515] transition-colors group"
               >
-                <div className="flex items-center space-x-2">
-                  <Globe className="w-4 h-4 text-blue-400" />
-                  <span>LinkedIn Profile</span>
-                </div>
-                <span className="text-slate-500 font-mono">&rarr;</span>
+                <span>LinkedIn / gopichinnapogu</span>
+                <ExternalLink className="w-4 h-4 text-[#686873] group-hover:text-[#C96F91]" />
+              </a>
+
+              <a
+                href={profileData.github}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center justify-between p-2.5 rounded-xl hover:bg-[#F8F7F8] text-xs sm:text-sm font-medium text-[#151515] transition-colors group"
+              >
+                <span>GitHub / gopichinnapogu</span>
+                <ExternalLink className="w-4 h-4 text-[#686873] group-hover:text-[#C96F91]" />
               </a>
             </div>
+          </div>
+
+          {/* Paper Plane Banner from Reference */}
+          <div className="p-5 rounded-2xl bg-gradient-to-r from-[#FCE7F0]/60 via-[#F8F7F8] to-[#FCE7F0]/40 border border-[#E8A0B8]/30 flex items-center space-x-3.5">
+            <div className="w-10 h-10 rounded-xl bg-[#C96F91] text-white flex items-center justify-center shrink-0 shadow-2xs">
+              <Send className="w-4 h-4 -rotate-12" />
+            </div>
+            <p className="text-xs sm:text-sm font-medium text-[#151515] leading-snug">
+              Good conversations lead to great opportunities. Let's chat!
+            </p>
           </div>
         </div>
 
         {/* Right Column: Contact Form */}
         <div className="lg:col-span-7">
-          <div className="p-6 sm:p-8 rounded-xl bg-[#0b1120] border border-cyan-900/60 shadow-xl space-y-6">
-            <div className="flex items-center justify-between">
-              <h3 className="text-xl font-bold font-display text-slate-100">
-                Send a Direct Message
-              </h3>
-              <span className="text-[11px] font-mono text-cyan-400 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-800/40">
-                Direct to {profileData.email}
-              </span>
-            </div>
-
-            {submitStatus === 'success' && (
-              <div className="p-4 rounded-lg bg-emerald-950/40 border border-emerald-800 text-slate-200 text-xs space-y-3">
-                <div className="flex items-center gap-2 text-emerald-300 font-semibold">
-                  <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" />
-                  <span>{successDetails?.message || 'Message safely logged in the server inbox!'}</span>
-                </div>
-                
-                <p className="text-slate-300 leading-relaxed text-[11px]">
-                  Your message has been saved to the server message inbox. To guarantee instant personal delivery right into Gopi's Gmail inbox, you can also send it with 1-click via your email client:
-                </p>
-
-                <div className="flex flex-wrap gap-2 pt-1">
-                  {successDetails?.gmailWebUrl && (
-                    <a
-                      href={successDetails.gmailWebUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="px-3 py-1.5 rounded bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold font-mono text-[11px] flex items-center space-x-1.5 transition-colors shadow"
-                    >
-                      <Mail className="w-3.5 h-3.5" />
-                      <span>Open in Gmail (Pre-filled)</span>
-                      <ExternalLink className="w-3 h-3" />
-                    </a>
-                  )}
-
-                  {successDetails?.mailtoUrl && (
-                    <a
-                      href={successDetails.mailtoUrl}
-                      className="px-3 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 font-mono text-[11px] flex items-center space-x-1.5 transition-colors border border-slate-700"
-                    >
-                      <Inbox className="w-3.5 h-3.5 text-cyan-400" />
-                      <span>Send with Default Mail App</span>
-                    </a>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {submitStatus === 'error' && (
-              <div className="p-4 rounded-lg bg-red-950/40 border border-red-800 text-red-300 text-xs space-y-2">
-                <div className="flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4 shrink-0 text-red-400" />
-                  <span>{errorMessage}</span>
-                </div>
+          <div className="p-6 sm:p-8 rounded-3xl bg-white border border-[#E6E6E8] shadow-[0_12px_36px_rgba(0,0,0,0.04)]">
+            {submitSuccess && (
+              <div className="mb-6 p-4 rounded-2xl bg-[#EDF7EE] border border-[#47A248]/30 flex items-start space-x-3 text-left">
+                <CheckCircle2 className="w-5 h-5 text-[#47A248] shrink-0 mt-0.5" />
                 <div>
-                  <a
-                    href={directMailtoUrl}
-                    className="underline text-cyan-300 hover:text-cyan-200"
-                  >
-                    Click here to open your email app and send directly to {profileData.email} &rarr;
-                  </a>
+                  <h4 className="text-sm font-bold text-[#1E5623]">Message Sent!</h4>
+                  <p className="text-xs text-[#2E7D32] mt-0.5">
+                    Thank you for reaching out. I'll get back to you as soon as possible.
+                  </p>
                 </div>
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-4 text-xs font-mono">
-              {/* Reason Selector */}
-              <div className="space-y-1.5">
-                <label className="text-slate-400 font-medium">INQUIRY REASON</label>
-                <select
-                  value={formData.reason}
-                  onChange={(e) => setFormData({ ...formData, reason: e.target.value as any })}
-                  className="w-full p-2.5 rounded-lg bg-[#070e1b] border border-slate-800 text-slate-200 focus:border-cyan-500 focus:outline-none"
-                >
-                  <option value="Job Opportunity">Job Opportunity (Full-Time / Internship)</option>
-                  <option value="Collaboration">Open-Source / Project Collaboration</option>
-                  <option value="Project Discussion">System Architecture & Technical Discussion</option>
-                  <option value="General Message">General Inquiry / Message</option>
-                </select>
-              </div>
-
-              {/* Name & Email Row */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <label className="text-slate-400 font-medium">YOUR NAME</label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    placeholder="e.g. Alex Rivera"
-                    className="w-full p-2.5 rounded-lg bg-[#070e1b] border border-slate-800 text-slate-200 focus:border-cyan-500 focus:outline-none"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-slate-400 font-medium">YOUR EMAIL ADDRESS</label>
-                  <input
-                    type="email"
-                    required
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder="alex@company.com"
-                    className="w-full p-2.5 rounded-lg bg-[#070e1b] border border-slate-800 text-slate-200 focus:border-cyan-500 focus:outline-none"
-                  />
-                </div>
-              </div>
-
-              {/* Message Area */}
-              <div className="space-y-1.5">
-                <label className="text-slate-400 font-medium">MESSAGE BODY</label>
-                <textarea
-                  rows={4}
+            <form onSubmit={handleSubmit} className="space-y-5 text-left">
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-[#151515] mb-2">
+                  Your Name
+                </label>
+                <input
+                  type="text"
                   required
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  placeholder="Share details regarding the role, problem statement, or technical inquiry..."
-                  className="w-full p-2.5 rounded-lg bg-[#070e1b] border border-slate-800 text-slate-200 focus:border-cyan-500 focus:outline-none font-sans text-xs"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  placeholder="What should I call you?"
+                  className="w-full px-4 py-3 rounded-xl bg-[#F8F7F8] border border-[#E6E6E8] text-sm text-[#151515] placeholder-[#686873] focus:outline-hidden focus:border-[#C96F91] focus:bg-white transition-all shadow-2xs"
                 />
               </div>
 
-              {/* Submit Buttons */}
-              <div className="space-y-2 pt-1">
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full py-3 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold font-sans text-xs sm:text-sm rounded-lg transition-all flex items-center justify-center gap-2 shadow-lg shadow-cyan-900/30 disabled:opacity-50 cursor-pointer"
-                >
-                  <Send className="w-4 h-4" />
-                  <span>{isSubmitting ? 'Transmitting Message...' : 'Submit Message via Portal'}</span>
-                </button>
-
-                <div className="flex items-center justify-between pt-1 text-[11px] text-slate-400">
-                  <span>Prefer your own email client?</span>
-                  <a
-                    href={directMailtoUrl}
-                    className="text-cyan-400 hover:text-cyan-300 flex items-center space-x-1"
-                  >
-                    <span>Send via Mailto</span>
-                    <ExternalLink className="w-3 h-3" />
-                  </a>
-                </div>
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-[#151515] mb-2">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  required
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  placeholder="Where can I reach you back?"
+                  className="w-full px-4 py-3 rounded-xl bg-[#F8F7F8] border border-[#E6E6E8] text-sm text-[#151515] placeholder-[#686873] focus:outline-hidden focus:border-[#C96F91] focus:bg-white transition-all shadow-2xs"
+                />
               </div>
+
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-[#151515] mb-2">
+                  Message
+                </label>
+                <textarea
+                  required
+                  rows={4}
+                  value={formData.message}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  placeholder="Tell me about your project, idea, or just say hello..."
+                  className="w-full px-4 py-3 rounded-xl bg-[#F8F7F8] border border-[#E6E6E8] text-sm text-[#151515] placeholder-[#686873] focus:outline-hidden focus:border-[#C96F91] focus:bg-white transition-all shadow-2xs resize-none"
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full sm:w-auto flex items-center justify-center space-x-2 px-8 py-3.5 rounded-xl bg-[#C96F91] hover:bg-[#B85B80] active:scale-98 text-white font-semibold text-sm shadow-[0_4px_16px_rgba(201,111,145,0.3)] transition-all cursor-pointer disabled:opacity-50"
+              >
+                <span>{isSubmitting ? 'Sending...' : 'Send Message'}</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
             </form>
           </div>
         </div>

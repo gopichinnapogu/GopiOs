@@ -60,8 +60,9 @@ export interface ProjectItem {
   title: string;
   badge: string;
   tagline: string;
-  category: 'System & Architecture' | 'AI & Machine Learning' | 'Distributed Systems' | 'Full-Stack Product';
+  category: 'System & Architecture' | 'AI & Machine Learning' | 'Distributed Systems' | 'Full-Stack Product' | 'Web Apps' | 'UI/UX' | 'Other';
   featured: boolean;
+  imageUrl?: string;
   metrics: { label: string; value: string }[];
   problem: string;
   goal: string;
@@ -110,7 +111,9 @@ export interface TimelineMilestone {
   period: string;
   title: string;
   roleOrContext: string;
-  category: 'milestone' | 'education' | 'project' | 'skill' | 'research';
+  institution?: string;
+  badge?: string;
+  category: 'education' | 'internship' | 'certification' | 'experience' | 'milestone' | 'project' | 'skill' | 'research';
   summary: string;
   highlights: string[];
   technologies: string[];

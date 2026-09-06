@@ -578,7 +578,7 @@ console.log(\`Verification: \${nums[indices[0]]} + \${nums[indices[1]]} = \${tar
 interface ExecutionHistoryItem {
   id: string;
   language: SupportedLanguage;
-  status: 'SUCCESS' | 'RUNTIME_ERROR' | 'COMPILATION_ERROR' | 'TIME_LIMIT_EXCEEDED';
+  status: 'SUCCESS' | 'RUNTIME_ERROR' | 'COMPILATION_ERROR' | 'TIME_LIMIT_EXCEEDED' | 'IDLE';
   executionTimeMs: number;
   memoryUsageMb: number;
   exitCode: number;
@@ -650,6 +650,13 @@ export const CodeLabSection: React.FC = () => {
         [lang]: tmpl.codeMap[lang]
       }));
     }
+    // Clear stale diagnostics and set clean ready prompt
+    setStderr('');
+    setLastStatus('IDLE');
+    setStdout(`Language changed to ${LANGUAGE_CONFIGS[lang].name}. Click "Run Code" or press (Cmd/Ctrl + Enter) to compile and execute.`);
+    setExecTime(null);
+    setMemoryUsage(null);
+    setExitCode(null);
   };
 
   const handleCodeChange = (newCode: string) => {
@@ -782,54 +789,29 @@ export const CodeLabSection: React.FC = () => {
   return (
     <section 
       id="lab" 
-      className={`py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto transition-all ${
+      className={`py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto border-t border-[#E6E6E8]/70 transition-all ${
         isFullscreen ? 'fixed inset-0 z-50 bg-[#040711] overflow-y-auto p-4 sm:p-6' : ''
       }`}
     >
       {/* Header & Title */}
-      <div className="space-y-4 mb-6">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2 text-xs font-mono text-cyan-400">
-            <Code2 className="w-4 h-4" />
-            <span className="uppercase tracking-wider">Module 04.5 // Realtime Multi-Language Online Compiler</span>
-          </div>
-
-          <div className="flex items-center space-x-2">
-            <button
-              onClick={() => setIsFullscreen(!isFullscreen)}
-              className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200 text-xs font-mono transition-colors flex items-center gap-1 cursor-pointer"
-              title={isFullscreen ? "Exit Fullscreen" : "Fullscreen Workspace"}
-            >
-              {isFullscreen ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
-              <span className="hidden sm:inline">{isFullscreen ? "Exit Fullscreen" : "Fullscreen"}</span>
-            </button>
-          </div>
+      <div className="text-center max-w-2xl mx-auto space-y-3 mb-10">
+        <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#FCE7F0] border border-[#E8A0B8]/40 shadow-2xs">
+          <span className="text-xs font-semibold uppercase tracking-wider text-[#C96F91]">
+            Interactive CodeLab
+          </span>
         </div>
 
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-          <div>
-            <h2 className="text-3xl sm:text-4xl font-bold font-display text-slate-100 tracking-tight flex items-center gap-3">
-              <span>Realtime Online IDE & Compiler</span>
-              <span className="text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-mono font-normal">
-                LIVE SANDBOX
-              </span>
-            </h2>
-            <p className="text-slate-400 text-sm max-w-2xl pt-1 leading-relaxed">
-              Write, compile, and execute code in <strong className="text-slate-200">Java, C, C++, Python, and JavaScript</strong> with real-time STDIN stream input, execution telemetry, and compiler diagnostics.
-            </p>
-          </div>
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#151515] tracking-tight">
+          Realtime Online IDE & Compiler
+        </h2>
 
-          <div className="flex flex-wrap items-center gap-2">
-            <div className="flex items-center space-x-1.5 px-3 py-1.5 bg-slate-900/90 rounded-lg border border-slate-800 text-xs font-mono text-slate-300">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Isolated Subprocess Runtime</span>
-            </div>
-          </div>
-        </div>
+        <p className="text-base text-[#686873] leading-relaxed">
+          Write, compile, and execute code in <strong className="text-[#151515]">Java, C, C++, Python, and JavaScript</strong> with real-time STDIN stream input and compiler diagnostics.
+        </p>
       </div>
 
       {/* Compiler Controls & Template Bar */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 mb-4 bg-[#080d1a] border border-slate-800 p-3 rounded-xl">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 mb-4 bg-white border border-[#E6E6E8] p-3 rounded-2xl shadow-xs">
         {/* Language Tabs */}
         <div className="lg:col-span-8 flex flex-wrap items-center gap-1.5">
           {(['java', 'c', 'cpp', 'python', 'javascript'] as SupportedLanguage[]).map((lang) => {
@@ -1156,7 +1138,14 @@ export const CodeLabSection: React.FC = () => {
                     {selectedLang === 'cpp' && `g++ -O2 -std=c++20 main.cpp -o main && ./main`}
                   </span>
                 </div>
-                <span className="text-[10px] text-slate-600">STDOUT / STDERR</span>
+                <div className="flex items-center gap-2">
+                  {activeEngine && (
+                    <span className="text-[10px] text-cyan-400 font-mono bg-cyan-950/40 px-2 py-0.5 rounded border border-cyan-800/40">
+                      {activeEngine}
+                    </span>
+                  )}
+                  <span className="text-[10px] text-slate-600">STDOUT / STDERR</span>
+                </div>
               </div>
 
               {/* Standard Output (STDOUT) */}
