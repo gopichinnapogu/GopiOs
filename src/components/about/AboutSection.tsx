@@ -116,7 +116,7 @@ export const AboutSection: React.FC = () => {
                 src="/gopi_portrait.jpg"
                 alt="Gopi Chinnapogu"
                 referrerPolicy="no-referrer"
-                className="w-full h-full object-cover object-center"
+                className="w-full h-full object-cover object-[center_20%]"
               />
 
               {/* Floating Glass Quote Card */}

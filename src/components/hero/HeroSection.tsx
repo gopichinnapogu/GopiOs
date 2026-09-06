@@ -127,7 +127,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 src="/gopi_portrait.jpg"
                 alt={profileData.name}
                 referrerPolicy="no-referrer"
-                className="w-full h-full object-cover object-center transform hover:scale-102 transition-transform duration-500"
+                className="w-full h-full object-cover object-[center_20%] transform hover:scale-102 transition-transform duration-500"
               />
 
               {/* Bottom Subtle Glass Card */}
