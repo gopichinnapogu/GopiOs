@@ -17,6 +17,13 @@
   </head>
   <body class="bg-[#FFFFFF] text-[#151515] font-sans antialiased selection:bg-[#E8A0B8]/40 selection:text-[#C96F91] overflow-x-hidden min-h-screen">
     <div id="root"></div>
+    <!-- Netlify form detection hook for automated email delivery on Netlify -->
+    <form name="contact" data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="text" name="reason" />
+      <textarea name="message"></textarea>
+    </form>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

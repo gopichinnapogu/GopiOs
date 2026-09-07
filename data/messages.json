@@ -1,5 +1,25 @@
 [
   {
+    "id": "msg_1788766637579_fq4xs",
+    "timestamp": "2026-09-07T07:37:17.579Z",
+    "name": "HR Recruiter",
+    "email": "recruiter@techventures.io",
+    "reason": "Job Opportunity",
+    "message": "Hi Gopi, we loved your portfolio projects and would like to invite you for an interview!",
+    "ip": "127.0.0.1",
+    "emailDispatched": true
+  },
+  {
+    "id": "msg_1788766423915_w34nm",
+    "timestamp": "2026-09-07T07:33:43.915Z",
+    "name": "Test User",
+    "email": "test@example.com",
+    "reason": "Test",
+    "message": "This is a test message to diagnose email delivery.",
+    "ip": "127.0.0.1",
+    "emailDispatched": true
+  },
+  {
     "id": "msg_1788197775341_2698r",
     "timestamp": "2026-08-31T17:36:15.341Z",
     "name": "Alex Rivera",

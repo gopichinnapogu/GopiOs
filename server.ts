@@ -762,15 +762,65 @@ app.post('/api/contact', async (req: Request, res: Response) => {
   const gmailWebUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${recipientEmail}&su=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(`Hi Gopi,\n\n${message}\n\nBest regards,\n${name}\n${email}`)}`;
 
   let emailDispatched = false;
+  let dispatchMethod = 'none';
   let dispatchError: string | undefined;
 
-  // Attempt real SMTP delivery if SMTP config is present
+  // 1. Primary Delivery: Resend API (High deliverability directly to Gmail Inbox)
+  if (process.env.RESEND_API_KEY) {
+    try {
+      const resendResponse = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          from: 'GOPI OS Portfolio <onboarding@resend.dev>',
+          to: [recipientEmail],
+          reply_to: email,
+          subject: emailSubject,
+          text: `New message from GOPI OS Portfolio:\n\nSender: ${name} (${email})\nCategory: ${reason || 'General Inquiry'}\n\nMessage:\n${message}`,
+          html: `
+            <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 24px; color: #151515; max-width: 600px; border: 1px solid #E6E6E8; border-radius: 12px; background: #ffffff;">
+              <div style="border-bottom: 2px solid #FCE7F0; padding-bottom: 12px; margin-bottom: 16px;">
+                <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: #C96F91; letter-spacing: 0.05em;">New Contact Message</span>
+                <h2 style="font-size: 20px; font-weight: 700; color: #151515; margin: 4px 0 0 0;">${name} reached out via GOPI OS</h2>
+              </div>
+              <p style="margin: 6px 0; font-size: 14px;"><strong>From:</strong> ${name} &lt;<a href="mailto:${email}" style="color: #C96F91;">${email}</a>&gt;</p>
+              <p style="margin: 6px 0; font-size: 14px;"><strong>Category:</strong> ${reason || 'General Message'}</p>
+              <div style="margin-top: 16px; padding: 16px; background: #F8F7F8; border-radius: 8px; border: 1px solid #E6E6E8;">
+                <strong style="display: block; font-size: 11px; color: #686873; text-transform: uppercase; margin-bottom: 8px;">Message:</strong>
+                <p style="margin: 0; white-space: pre-wrap; font-size: 14px; line-height: 1.6; color: #151515;">${message}</p>
+              </div>
+              <div style="margin-top: 20px; font-size: 12px; color: #888890; text-align: center;">
+                Reply directly to this email to respond to ${name} (${email})
+              </div>
+            </div>
+          `
+        })
+      });
+
+      if (resendResponse.ok) {
+        const resendData = await resendResponse.json();
+        emailDispatched = true;
+        dispatchMethod = 'resend';
+        console.log(`[Contact] Dispatched via Resend API to ${recipientEmail}:`, resendData);
+      } else {
+        const errText = await resendResponse.text();
+        console.warn(`[Contact] Resend API status ${resendResponse.status}:`, errText);
+      }
+    } catch (resendErr: any) {
+      console.warn(`[Contact] Resend API exception:`, resendErr);
+    }
+  }
+
+  // 2. Secondary Fallback: SMTP delivery via Nodemailer
   const smtpUser = process.env.SMTP_USER;
   const smtpPass = process.env.SMTP_PASS || process.env.GMAIL_APP_PASSWORD;
   const smtpHost = process.env.SMTP_HOST || 'smtp.gmail.com';
   const smtpPort = parseInt(process.env.SMTP_PORT || '587', 10);
 
-  if (smtpUser && smtpPass) {
+  if (!emailDispatched && smtpUser && smtpPass) {
     try {
       const transporter = nodemailer.createTransport({
         host: smtpHost,
@@ -790,7 +840,7 @@ app.post('/api/contact', async (req: Request, res: Response) => {
         text: `New message from GOPI OS Portfolio:\n\nSender: ${name} (${email})\nCategory: ${reason}\n\nMessage:\n${message}`,
         html: `
           <div style="font-family: sans-serif; padding: 20px; color: #1e293b; max-width: 600px; border: 1px solid #e2e8f0; border-radius: 8px;">
-            <h2 style="color: #0284c7; margin-top: 0;">New Contact Message on GOPI OS</h2>
+            <h2 style="color: #C96F91; margin-top: 0;">New Contact Message on GOPI OS</h2>
             <p><strong>From:</strong> ${name} (<a href="mailto:${email}">${email}</a>)</p>
             <p><strong>Category:</strong> ${reason}</p>
             <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 16px 0;" />
@@ -799,6 +849,7 @@ app.post('/api/contact', async (req: Request, res: Response) => {
         `
       });
       emailDispatched = true;
+      dispatchMethod = 'smtp';
       console.log(`[Contact] Dispatched SMTP email to ${recipientEmail}`);
     } catch (err: any) {
       dispatchError = err?.message || 'SMTP delivery failed';
@@ -829,6 +880,7 @@ app.post('/api/contact', async (req: Request, res: Response) => {
       ? 'Your email has been dispatched directly to Gopi\'s inbox.' 
       : 'Your message has been safely logged in the server inbox.',
     emailDispatched,
+    dispatchMethod,
     recipientEmail,
     mailtoUrl,
     gmailWebUrl
