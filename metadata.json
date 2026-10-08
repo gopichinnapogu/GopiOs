@@ -1,0 +1,8 @@
+{
+  "name": "GOPI OS",
+  "description": "Personal portfolio for Gopi Chinnapogu, a Computer Science student and aspiring software developer, crafted with modern editorial typography and glassmorphism.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
